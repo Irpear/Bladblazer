@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-    public int width = 8;
-    public int height = 8;
+    public int width = 12;
+    public int height = 12;
     public GameObject blockPrefab;
 
     public GameObject[,] grid;
@@ -38,4 +38,20 @@ public class Board : MonoBehaviour
         grid[x, y] = blockObj;
     }
 
+    public int CountBlocksBelow(int startX, int startY, int dirX)
+{
+    int count = 0;
+    int x = startX + dirX;
+    int y = startY - 1;
+
+    while (x >= 0 && x < width && y >= 0)
+    {
+        if (grid[x, y] != null) count++;
+        y--;
+        x += dirX;
+    }
+
+    return count;
 }
+}
+

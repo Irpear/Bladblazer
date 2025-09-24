@@ -21,8 +21,8 @@ public class Block : MonoBehaviour
     void TryFall()
     {
         // Kies hier de richting: linksonder of rechtsonder
-        Vector2Int fallDirLeft = new Vector2Int(-1, -1);
-        Vector2Int fallDirRight = new Vector2Int(1, -1);
+        Vector2Int fallDirLeft = new Vector2Int(0, -1);
+        Vector2Int fallDirRight = new Vector2Int(1, 0);
 
         // Eerst proberen linksonder
         if (CanMoveTo(x + fallDirLeft.x, y + fallDirLeft.y))
