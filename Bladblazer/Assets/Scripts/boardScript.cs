@@ -28,6 +28,7 @@ public class Board : MonoBehaviour
     void SpawnBlock(int x, int y)
     {
         Vector2 pos = new Vector2(x, y);
+
         GameObject blockObj = Instantiate(blockPrefab, pos, Quaternion.identity);
 
         Block b = blockObj.GetComponent<Block>();
