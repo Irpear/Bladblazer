@@ -4,7 +4,7 @@ public class Board : MonoBehaviour
 {
     public int width = 12;
     public int height = 12;
-    public GameObject blockPrefab;
+    public GameObject[] blockPrefabs;
 
     public GameObject[,] grid;
 
@@ -27,9 +27,43 @@ public class Board : MonoBehaviour
 
     void SpawnBlock(int x, int y)
     {
-        Vector2 pos = new Vector2(x, y);
+        // Zorgt ervoor dat er niet dezelfde kleur blokjes naast elkaar komen te liggen
+        int maxAttemps = 10;
+        int prefabIndex = Random.Range(0, blockPrefabs.Length);
 
-        GameObject blockObj = Instantiate(blockPrefab, pos, Quaternion.identity);
+        for (int attempt = 0; attempt < maxAttemps; attempt++)
+        {
+            bool hasSameNeighbor = false;
+
+            // Check het linker blokje
+            if (x > 0 && grid[x - 1, y] != null)
+            {
+                if (grid[x - 1, y].name.Contains(blockPrefabs[prefabIndex].name))
+                {
+                    hasSameNeighbor = true;
+                }
+                    
+            }
+
+            // Check het blokje eronder
+            if (y > 0 && grid[x, y - 1] != null)
+            {
+                if (grid[x, y - 1].name.Contains(blockPrefabs[prefabIndex].name))
+                { 
+                    hasSameNeighbor = true;
+                }
+            }
+
+            if (!hasSameNeighbor)
+            {
+                break;
+            }
+
+            prefabIndex = Random.Range(0, blockPrefabs.Length);
+        }
+
+        Vector2 pos = new Vector2(x, y);
+        GameObject blockObj = Instantiate(blockPrefabs[prefabIndex], pos, Quaternion.identity);
 
         Block b = blockObj.GetComponent<Block>();
         b.x = x;

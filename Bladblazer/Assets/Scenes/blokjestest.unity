@@ -331,7 +331,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   width: 12
   height: 12
-  blockPrefab: {fileID: 4297138597883612037, guid: 36525d3611ebf5b4095ac8df6c19d060, type: 3}
+  blockPrefabs:
+  - {fileID: 4297138597883612037, guid: 0703ead848ded8247bbaa76536bbf3ff, type: 3}
+  - {fileID: 4297138597883612037, guid: 36525d3611ebf5b4095ac8df6c19d060, type: 3}
+  - {fileID: 4297138597883612037, guid: 4b8d3b13597dd334fb9b84cb45c29364, type: 3}
+  - {fileID: 4297138597883612037, guid: 2f305c708b28fc140a24198cfd80fef0, type: 3}
 --- !u!4 &1779891502
 Transform:
   m_ObjectHideFlags: 0
