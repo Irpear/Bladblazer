@@ -7,15 +7,17 @@ public class Block : MonoBehaviour
     public int y;
 
     public Board board;
-
+    public MoveManager moveManager;
     void Start()
     {
         board = FindFirstObjectByType<Board>();
+        moveManager = FindFirstObjectByType<MoveManager>();
     }
 
     void Update()
     {
         TryFall();
+        moveManager = FindFirstObjectByType<MoveManager>();
     }
 
     void TryFall()
@@ -72,11 +74,14 @@ public class Block : MonoBehaviour
     public void OnClicked()
     {
         Debug.Log($"Block clicked at {x},{y}");
-        if (board != null)
+        if (board != null && !moveManager.gameIsOver)
         {
             board.grid[x, y] = null;
+            Destroy(gameObject);
+            Debug.Log(moveManager.gameIsOver);
         }
-        Destroy(gameObject);
+
+        moveManager.UseMove();
     }
 
 }
