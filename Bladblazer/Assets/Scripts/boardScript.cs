@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Board : MonoBehaviour
@@ -15,6 +16,7 @@ public class Board : MonoBehaviour
     {
         grid = new GameObject[width, height];
         FillBoard();
+        CheckMatches();
     }
 
     private void Update()
@@ -90,6 +92,156 @@ public class Board : MonoBehaviour
         grid[x, y] = blockObj;
     }
 
+    public void CheckMatches()
+    {
+        bool[,] mark = new bool[width, height];
+
+        // HORIZONTAAL: loop elke rij en zoek runs (aaneengesloten gelijke kleuren)
+        for (int y = 0; y < height; y++)
+        {
+            int runStartX = 0;
+            int runColor = -999;
+            int runLength = 0;
+
+            for (int x = 0; x < width; x++)
+            {
+                if (grid[x, y] == null)
+                {
+                    // vakje leeg => run afsluiten
+                    if (runLength >= 3)
+                    {
+                        for (int k = runStartX; k < runStartX + runLength; k++) mark[k, y] = true;
+                    }
+                    runLength = 0;
+                    runColor = -999;
+                    runStartX = x + 1;
+                    continue;
+                }
+
+                Block b = grid[x, y].GetComponent<Block>();
+                int c = b.colorId;
+
+                if (runLength == 0)
+                {
+                    // start nieuwe run
+                    runStartX = x;
+                    runLength = 1;
+                    runColor = c;
+                }
+                else if (c == runColor)
+                {
+                    runLength++;
+                }
+                else
+                {
+                    // run afgesloten door andere kleur
+                    if (runLength >= 3)
+                    {
+                        for (int k = runStartX; k < runStartX + runLength; k++) mark[k, y] = true;
+                    }
+                    // start nieuwe run
+                    runStartX = x;
+                    runLength = 1;
+                    runColor = c;
+                }
+            }
+
+            // aan einde van rij: check trailing run
+            if (runLength >= 3)
+            {
+                for (int k = runStartX; k < runStartX + runLength; k++) mark[k, y] = true;
+            }
+        }
+
+        // VERTICAAL: idem, maar kolom-voor-kolom
+        for (int x = 0; x < width; x++)
+        {
+            int runStartY = 0;
+            int runColor = -999;
+            int runLength = 0;
+
+            for (int y = 0; y < height; y++)
+            {
+                if (grid[x, y] == null)
+                {
+                    if (runLength >= 3)
+                    {
+                        for (int k = runStartY; k < runStartY + runLength; k++) mark[x, k] = true;
+                    }
+                    runLength = 0;
+                    runColor = -999;
+                    runStartY = y + 1;
+                    continue;
+                }
+
+                Block b = grid[x, y].GetComponent<Block>();
+                int c = b.colorId;
+
+                if (runLength == 0)
+                {
+                    runStartY = y;
+                    runLength = 1;
+                    runColor = c;
+                }
+                else if (c == runColor)
+                {
+                    runLength++;
+                }
+                else
+                {
+                    if (runLength >= 3)
+                    {
+                        for (int k = runStartY; k < runStartY + runLength; k++) mark[x, k] = true;
+                    }
+                    runStartY = y;
+                    runLength = 1;
+                    runColor = c;
+                }
+            }
+
+            if (runLength >= 3)
+            {
+                for (int k = runStartY; k < runStartY + runLength; k++) mark[x, k] = true;
+            }
+        }
+
+        // Bouw lijst van te verwijderen posities (en debug print)
+        List<(int x, int y)> removePositions = new List<(int x, int y)>();
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (mark[x, y] && grid[x, y] != null)
+                {
+                    removePositions.Add((x, y));
+                }
+            }
+        }
+
+        Debug.Log("Matches gevonden (count coords): " + removePositions.Count);
+
+        // Verwijder nu veilig op basis van coördinaten uit de grid
+        foreach (var pos in removePositions)
+        {
+            GameObject go = grid[pos.x, pos.y];
+            if (go != null)
+            {
+                grid[pos.x, pos.y] = null;
+                Destroy(go);
+            }
+        }
+
+        if (removePositions.Count >= 3)
+        {
+            MoveManager moveManager = FindFirstObjectByType<MoveManager>();
+            if (moveManager != null && !moveManager.gameIsOver)
+            {
+                moveManager.AddExtraMove();
+                Debug.Log("Bonus move! Total moves: " + moveManager.totalMoves);
+            }
+        }
+    }
+
     public int CountBlocksBelow(int startX, int startY, int dirX)
 {
     int count = 0;
@@ -120,6 +272,7 @@ public class Board : MonoBehaviour
             }
         }
 
+        CheckMatches();
 
     }
 }

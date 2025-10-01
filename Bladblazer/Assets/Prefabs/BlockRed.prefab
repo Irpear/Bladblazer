@@ -107,6 +107,8 @@ MonoBehaviour:
   x: 0
   y: 0
   board: {fileID: 0}
+  moveManager: {fileID: 0}
+  colorId: 2
 --- !u!61 &-8952480965811329652
 BoxCollider2D:
   m_ObjectHideFlags: 0

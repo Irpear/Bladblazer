@@ -8,6 +8,7 @@ public class Block : MonoBehaviour
 
     public Board board;
     public MoveManager moveManager;
+    public int colorId;
 
 
     void Start()
@@ -100,6 +101,7 @@ public class Block : MonoBehaviour
             board.timerActive = true;
 
             moveManager.UseMove();
+            board.CheckMatches();
         }
 
     }

@@ -33,6 +33,12 @@ public class MoveManager : MonoBehaviour
         }
     }
 
+    public void AddExtraMove()
+    {
+        movesLeft++;
+        UpdateMovesUI();
+    }
+
     void UpdateMovesUI()
     {
         if (movesText != null)
