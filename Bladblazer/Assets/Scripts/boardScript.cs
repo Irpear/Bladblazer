@@ -8,10 +8,28 @@ public class Board : MonoBehaviour
 
     public GameObject[,] grid;
 
+    public float timer = 0f;
+    public bool timerActive = false;
+
     void Start()
     {
         grid = new GameObject[width, height];
         FillBoard();
+    }
+
+    private void Update()
+    {
+
+        if (timerActive)
+        {
+            Debug.Log($"Timer: {timer}");
+            timer -= Time.deltaTime;
+            if (timer <= 0f)
+            {
+                timerActive = false;
+                SpawnNewBlock();
+            }
+        }
     }
 
     void FillBoard()
@@ -87,5 +105,23 @@ public class Board : MonoBehaviour
 
     return count;
 }
+
+    public void SpawnNewBlock()
+    {
+        for (int x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                if (grid.GetValue(x, y) == null)
+                {
+                    SpawnBlock(x, y);
+                    Debug.Log($"Spawned new block at {x},{y}");
+                }
+            }
+        }
+
+
+    }
 }
+
 

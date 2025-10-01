@@ -8,6 +8,8 @@ public class Block : MonoBehaviour
 
     public Board board;
     public MoveManager moveManager;
+
+
     void Start()
     {
         board = FindFirstObjectByType<Board>();
@@ -18,6 +20,7 @@ public class Block : MonoBehaviour
     {
         TryFall();
         moveManager = FindFirstObjectByType<MoveManager>();
+
     }
 
     void TryFall()
@@ -73,15 +76,32 @@ public class Block : MonoBehaviour
 
     public void OnClicked()
     {
-        Debug.Log($"Block clicked at {x},{y}");
-        if (board != null && !moveManager.gameIsOver)
+
+
+        // Inspawnen van een nieuw blok werkt nu
+        // Nu er voor zorgen dat een ander blok pas weggehaalt kan worden als een nieuw blok is gespawned
+
+        // Ik heb het een beetje geprobeerd door een !board.timerActive toe te voegen aan de if statement
+        // Maar dat werkt niet helemaal, je kan blokken dan niet meer weghalen zolang de timer actief is
+        // Maar als je klikt gaan je moves nog steeds wel naar beneden, en de timer wordt dan weer gereset (ook al gaan er geen blokken weg)
+
+        if (!board.timerActive)
         {
-            board.grid[x, y] = null;
-            Destroy(gameObject);
-            Debug.Log(moveManager.gameIsOver);
+
+            Debug.Log($"Block clicked at {x},{y}");
+            if (board != null && !moveManager.gameIsOver && !board.timerActive)
+            {
+                board.grid[x, y] = null;
+                Destroy(gameObject);
+                Debug.Log(moveManager.gameIsOver);
+            }
+
+            board.timer = 0.5f;
+            board.timerActive = true;
+
+            moveManager.UseMove();
         }
 
-        moveManager.UseMove();
     }
 
 }

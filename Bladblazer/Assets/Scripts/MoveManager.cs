@@ -10,20 +10,22 @@ public class MoveManager : MonoBehaviour
     public Text movesText;
     public bool gameIsOver = false;
 
+    public Board board;
+
     public GameObject gameOverScreen;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        board = FindFirstObjectByType<Board>();
         movesLeft = totalMoves;
     }
 
     public void UseMove()
     {
         if (gameIsOver) return;
-        movesLeft--;
-
-        UpdateMovesUI();
-        Debug.Log("Moves left: " + movesLeft);
+            movesLeft--;
+            UpdateMovesUI();
+            Debug.Log("Moves left: " + movesLeft);
 
         if (movesLeft <= 0)
         {
