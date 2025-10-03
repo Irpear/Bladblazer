@@ -19,28 +19,28 @@ public class Block : MonoBehaviour
 
     void Update()
     {
-        TryFall();
+        //TryFall();
         moveManager = FindFirstObjectByType<MoveManager>();
 
     }
 
-    void TryFall()
-    {
-        // Kies hier de richting: linksonder of rechtsonder
-        Vector2Int fallDirLeft = new Vector2Int(0, -1);
-        Vector2Int fallDirRight = new Vector2Int(1, 0);
+    //void TryFall()
+    //{
+    //    // Kies hier de richting: linksonder of rechtsonder
+    //    Vector2Int fallDirLeft = new Vector2Int(0, -1);
+    //    Vector2Int fallDirRight = new Vector2Int(1, 0);
 
-        // Eerst proberen linksonder
-        if (CanMoveTo(x + fallDirLeft.x, y + fallDirLeft.y))
-        {
-            MoveTo(x + fallDirLeft.x, y + fallDirLeft.y);
-        }
-        // Anders proberen rechtsonder
-        else if (CanMoveTo(x + fallDirRight.x, y + fallDirRight.y))
-        {
-            MoveTo(x + fallDirRight.x, y + fallDirRight.y);
-        }
-    }
+    //    // Eerst proberen linksonder
+    //    if (CanMoveTo(x + fallDirLeft.x, y + fallDirLeft.y))
+    //    {
+    //        MoveTo(x + fallDirLeft.x, y + fallDirLeft.y);
+    //    }
+    //    // Anders proberen rechtsonder
+    //    else if (CanMoveTo(x + fallDirRight.x, y + fallDirRight.y))
+    //    {
+    //        MoveTo(x + fallDirRight.x, y + fallDirRight.y);
+    //    }
+    //}
 
     bool CanMoveTo(int targetX, int targetY)
     {
@@ -66,7 +66,7 @@ public class Block : MonoBehaviour
         StartCoroutine(MoveAnimation(new Vector2(x, y)));
     }
 
-    IEnumerator MoveAnimation(Vector2 targetPos)
+    public IEnumerator MoveAnimation(Vector2 targetPos)
     {
         while ((Vector2)transform.position != targetPos)
         {
@@ -101,7 +101,7 @@ public class Block : MonoBehaviour
             board.timerActive = true;
 
             moveManager.UseMove();
-            board.CheckMatches();
+            board.StartCoroutine(board.ResolveMatches());
         }
 
     }
