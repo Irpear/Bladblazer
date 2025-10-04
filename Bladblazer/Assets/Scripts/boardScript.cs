@@ -4,19 +4,36 @@ using UnityEngine;
 
 public class Board : MonoBehaviour
 {
-    public int width = 12;
-    public int height = 12;
-    public GameObject[] blockPrefabs;
+    [Header("Board Settings")]
+    public int width = 12;          // Speelveld breedte
+    public int height = 12;         // Speelveld hoogte
+    public int bufferSize = 3;      // Hoe diep de buffer zones zijn
 
-    public GameObject[,] grid;
+    public GameObject[] blockPrefabs;
+    public GameObject[,] grid;      // Totale grid inclusief buffer
 
     public float timer = 0f;
     public bool timerActive = false;
 
+    // Totale grid grootte (speelveld + buffer)
+    private int totalWidth;
+    private int totalHeight;
+
+    // Offset voor het speelveld (buffer zit links, dus offset = bufferSize)
+    private int playFieldOffsetX;
+    private int playFieldOffsetY = 0; // Y blijft 0, buffer alleen boven
+
     void Start()
     {
-        grid = new GameObject[width, height];
+        // Grid is groter dan speelveld voor buffer zones
+        totalWidth = width + bufferSize;
+        totalHeight = height + bufferSize;
+        playFieldOffsetX = bufferSize; // Speelveld begint na de buffer
+
+        grid = new GameObject[totalWidth, totalHeight];
+
         FillBoard();
+        FillBufferZones(); // Vul de buffer zones aan de start
         StartCoroutine(ResolveMatches());
     }
 
@@ -24,58 +41,91 @@ public class Board : MonoBehaviour
     {
         if (timerActive)
         {
-            
             timer -= Time.deltaTime;
             if (timer <= 0f)
             {
                 timerActive = false;
-                SpawnNewBlock();
+                // Na timer: vul buffer zones opnieuw
+                FillBufferZones();
             }
         }
     }
 
     void FillBoard()
     {
+        // Vul alleen het speelveld (met offset voor linkerbuffer)
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                SpawnBlock(x, y);
+                SpawnBlock(x + playFieldOffsetX, y + playFieldOffsetY);
             }
         }
     }
 
-    void SpawnBlock(int x, int y)
+    // Vult de buffer zones (links en boven)
+    void FillBufferZones()
     {
-        int maxAttemps = 10;
+        // Linkerkant buffer (x < playFieldOffsetX)
+        for (int x = 0; x < playFieldOffsetX; x++)
+        {
+            for (int y = 0; y < totalHeight; y++)
+            {
+                if (grid[x, y] == null)
+                {
+                    SpawnBlock(x, y, isBuffer: true);
+                }
+            }
+        }
+
+        // Bovenkant buffer (y >= height)
+        for (int y = height; y < totalHeight; y++)
+        {
+            for (int x = playFieldOffsetX; x < totalWidth; x++)
+            {
+                if (grid[x, y] == null)
+                {
+                    SpawnBlock(x, y, isBuffer: true);
+                }
+            }
+        }
+    }
+
+    void SpawnBlock(int x, int y, bool isBuffer = false)
+    {
+        int maxAttempts = 10;
         int prefabIndex = Random.Range(0, blockPrefabs.Length);
 
-        for (int attempt = 0; attempt < maxAttemps; attempt++)
+        // Alleen match-preventie doen in het speelveld, niet in buffer
+        if (!isBuffer)
         {
-            bool hasSameNeighbor = false;
-
-            if (x > 0 && grid[x - 1, y] != null)
+            for (int attempt = 0; attempt < maxAttempts; attempt++)
             {
-                if (grid[x - 1, y].name.Contains(blockPrefabs[prefabIndex].name))
+                bool hasSameNeighbor = false;
+
+                if (x > 0 && grid[x - 1, y] != null)
                 {
-                    hasSameNeighbor = true;
+                    if (grid[x - 1, y].name.Contains(blockPrefabs[prefabIndex].name))
+                    {
+                        hasSameNeighbor = true;
+                    }
                 }
-            }
 
-            if (y > 0 && grid[x, y - 1] != null)
-            {
-                if (grid[x, y - 1].name.Contains(blockPrefabs[prefabIndex].name))
+                if (y > 0 && grid[x, y - 1] != null)
                 {
-                    hasSameNeighbor = true;
+                    if (grid[x, y - 1].name.Contains(blockPrefabs[prefabIndex].name))
+                    {
+                        hasSameNeighbor = true;
+                    }
                 }
-            }
 
-            if (!hasSameNeighbor)
-            {
-                break;
-            }
+                if (!hasSameNeighbor)
+                {
+                    break;
+                }
 
-            prefabIndex = Random.Range(0, blockPrefabs.Length);
+                prefabIndex = Random.Range(0, blockPrefabs.Length);
+            }
         }
 
         Vector2 pos = new Vector2(x, y);
@@ -84,23 +134,37 @@ public class Board : MonoBehaviour
         Block b = blockObj.GetComponent<Block>();
         b.x = x;
         b.y = y;
+        b.colorId = prefabIndex;
         b.board = this;
         grid[x, y] = blockObj;
+
+        // Maak buffer blokken onzichtbaar of semi-transparant
+        if (isBuffer)
+        {
+            SpriteRenderer sr = blockObj.GetComponent<SpriteRenderer>();
+            if (sr != null)
+            {
+                Color c = sr.color;
+                c.a = 0f; // Volledig transparant (of 0.3f voor semi-transparant)
+                sr.color = c;
+            }
+        }
     }
 
     public bool CheckMatches()
     {
         Debug.Log("=== CheckMatches() START ===");
-        bool[,] mark = new bool[width, height];
+        bool[,] mark = new bool[totalWidth, totalHeight];
 
+        // Check alleen binnen het speelveld (niet in buffer zones)
         // HORIZONTAAL
         for (int y = 0; y < height; y++)
         {
-            int runStartX = 0;
+            int runStartX = playFieldOffsetX;
             int runColor = -999;
             int runLength = 0;
 
-            for (int x = 0; x < width; x++)
+            for (int x = playFieldOffsetX; x < playFieldOffsetX + width; x++)
             {
                 if (grid[x, y] == null)
                 {
@@ -146,7 +210,7 @@ public class Board : MonoBehaviour
         }
 
         // VERTICAAL
-        for (int x = 0; x < width; x++)
+        for (int x = playFieldOffsetX; x < playFieldOffsetX + width; x++)
         {
             int runStartY = 0;
             int runColor = -999;
@@ -198,18 +262,20 @@ public class Board : MonoBehaviour
         }
 
         List<(int x, int y)> removePositions = new List<(int x, int y)>();
-        for (int x = 0; x < width; x++)
+        for (int x = playFieldOffsetX; x < playFieldOffsetX + width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 if (mark[x, y] && grid[x, y] != null)
                 {
                     removePositions.Add((x, y));
+                    Debug.Log($"Match gevonden op: ({x}, {y})");
                 }
             }
         }
 
-        Debug.Log("Matches gevonden (count coords): " + removePositions.Count);
+        Debug.Log($"Totaal matches gevonden: {removePositions.Count}");
+        Debug.Log("=== CheckMatches() END ===");
 
         // Verwijder de matches
         foreach (var pos in removePositions)
@@ -233,23 +299,7 @@ public class Board : MonoBehaviour
             }
         }
 
-        // Return true als er überhaupt matches waren (ook als het minder dan 3 zijn)
         return removePositions.Count > 0;
-    }
-
-    public void SpawnNewBlock()
-    {
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                if (grid.GetValue(x, y) == null)
-                {
-                    SpawnBlock(x, y);
-                    Debug.Log($"Spawned new block at {x},{y}");
-                }
-            }
-        }
     }
 
     public IEnumerator ResolveMatches()
@@ -259,48 +309,50 @@ public class Board : MonoBehaviour
         while (matchFound)
         {
             ApplyGravity();
+            FillBufferZones(); // Vul buffer telkens bij
             yield return new WaitForSeconds(0.6f);
             matchFound = CheckMatches();
         }
     }
 
-    // ============ NIEUWE GRAVITY SYSTEEM ============
+    // ============ GRAVITY SYSTEEM MET BUFFER SUPPORT ============
 
     public void ApplyGravity()
     {
         bool anyMoved = true;
 
-        // Blijf herhalen totdat niks meer beweegt
         while (anyMoved)
         {
             anyMoved = false;
 
-            // Scan van linksonder naar rechtsboven (belangrijk voor correcte volgorde)
+            // Scan het hele speelveld (met offset)
             for (int y = 0; y < height; y++)
             {
-                for (int x = 0; x < width; x++)
+                for (int x = playFieldOffsetX; x < playFieldOffsetX + width; x++)
                 {
-                    if (grid[x, y] == null) // Leeg vakje gevonden
+                    if (grid[x, y] == null)
                     {
-                        // Check welke diagonale rij de meeste druk heeft
-                        int leftPressure = CountDiagonalPressure(x, y, -1, 0); // Links (x-1, y richting)
-                        int upPressure = CountDiagonalPressure(x, y, 0, 1);    // Boven (x, y+1 richting)
+                        // Check druk vanuit alle richtingen (inclusief buffer)
+                        int leftPressure = CountDiagonalPressure(x, y, -1, 0);
+                        int upPressure = CountDiagonalPressure(x, y, 0, 1);
+
+                        if (leftPressure > 0 || upPressure > 0)
+                        {
+                            Debug.Log($"Leeg vakje op ({x},{y}) - Links druk: {leftPressure}, Boven druk: {upPressure}");
+                        }
 
                         if (leftPressure > upPressure && leftPressure > 0)
                         {
-                            // Schuif hele linker diagonale rij
                             if (SlideDiagonalLine(x, y, -1, 0))
                                 anyMoved = true;
                         }
                         else if (upPressure > leftPressure && upPressure > 0)
                         {
-                            // Schuif hele boven diagonale rij
                             if (SlideDiagonalLine(x, y, 0, 1))
                                 anyMoved = true;
                         }
                         else if (leftPressure > 0 || upPressure > 0)
                         {
-                            // Gelijke druk: kies random
                             if (Random.value < 0.5f && leftPressure > 0)
                             {
                                 if (SlideDiagonalLine(x, y, -1, 0))
@@ -318,15 +370,14 @@ public class Board : MonoBehaviour
         }
     }
 
-    // Telt hoeveel blokken er in een diagonale lijn zitten
     private int CountDiagonalPressure(int emptyX, int emptyY, int dirX, int dirY)
     {
         int count = 0;
         int checkX = emptyX + dirX;
         int checkY = emptyY + dirY;
 
-        // Loop door de diagonale lijn
-        while (checkX >= 0 && checkX < width && checkY >= 0 && checkY < height)
+        // Tel door tot BUITEN de grid (inclusief buffer zones)
+        while (checkX >= 0 && checkX < totalWidth && checkY >= 0 && checkY < totalHeight)
         {
             if (grid[checkX, checkY] != null)
             {
@@ -336,24 +387,22 @@ public class Board : MonoBehaviour
             }
             else
             {
-                break; // Stop bij eerste gat
+                break;
             }
         }
 
         return count;
     }
 
-    // Schuift een hele diagonale rij naar beneden (als trein over rails)
     private bool SlideDiagonalLine(int emptyX, int emptyY, int dirX, int dirY)
     {
-        // Vind alle blokken in deze diagonale lijn
         List<(int x, int y)> lineBlocks = new List<(int x, int y)>();
 
         int checkX = emptyX + dirX;
         int checkY = emptyY + dirY;
 
-        // Verzamel alle aaneengesloten blokken in de lijn
-        while (checkX >= 0 && checkX < width && checkY >= 0 && checkY < height)
+        // Verzamel blokken tot BUITEN het speelveld (buffer zones)
+        while (checkX >= 0 && checkX < totalWidth && checkY >= 0 && checkY < totalHeight)
         {
             if (grid[checkX, checkY] != null)
             {
@@ -367,12 +416,10 @@ public class Board : MonoBehaviour
             }
         }
 
-        // Als er geen blokken zijn om te schuiven
         if (lineBlocks.Count == 0)
             return false;
 
-        // Schuif alle blokken in de lijn één positie naar beneden
-        // Start bij het eerste blok (dichtstbij de lege plek)
+        // Schuif alle blokken
         for (int i = 0; i < lineBlocks.Count; i++)
         {
             int fromX = lineBlocks[i].x;
@@ -386,7 +433,6 @@ public class Board : MonoBehaviour
         return true;
     }
 
-    // Verplaatst een blok direct (voor gravity systeem)
     private void MoveBlockImmediate(int fromX, int fromY, int toX, int toY)
     {
         if (grid[fromX, fromY] == null) return;
@@ -399,6 +445,22 @@ public class Board : MonoBehaviour
 
         b.x = toX;
         b.y = toY;
+
+        // Als blok het speelveld binnenkomt, maak het zichtbaar
+        bool wasInBuffer = (fromX < playFieldOffsetX || fromY >= height);
+        bool isNowInPlayfield = (toX >= playFieldOffsetX && toX < playFieldOffsetX + width && toY < height);
+
+        if (wasInBuffer && isNowInPlayfield)
+            if (wasInBuffer && isNowInPlayfield)
+            {
+                SpriteRenderer sr = block.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    Color c = sr.color;
+                    c.a = 1f; // Volledig zichtbaar
+                    sr.color = c;
+                }
+            }
 
         b.StopAllCoroutines();
         b.StartCoroutine(b.MoveAnimation(new Vector2(toX, toY)));
