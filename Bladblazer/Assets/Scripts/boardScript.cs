@@ -277,15 +277,9 @@ public class Board : MonoBehaviour
         Debug.Log($"Totaal matches gevonden: {removePositions.Count}");
         Debug.Log("=== CheckMatches() END ===");
 
-        // Verwijder de matches
-        foreach (var pos in removePositions)
+        if (removePositions.Count > 0)
         {
-            GameObject go = grid[pos.x, pos.y];
-            if (go != null)
-            {
-                grid[pos.x, pos.y] = null;
-                Destroy(go);
-            }
+            StartCoroutine(AnimateAndDestroyMatches(removePositions));
         }
 
         // Als er matches waren, geef bonus move
@@ -309,9 +303,16 @@ public class Board : MonoBehaviour
         while (matchFound)
         {
             ApplyGravity();
-            FillBufferZones(); // Vul buffer telkens bij
+            FillBufferZones();
             yield return new WaitForSeconds(0.6f);
+
             matchFound = CheckMatches();
+
+            // NIEUW: Wacht tot de animatie klaar is voordat we doorgaan
+            if (matchFound)
+            {
+                yield return new WaitForSeconds(0.3f); // Zelfde tijd als in AnimateAndDestroyMatches
+            }
         }
     }
 
@@ -465,4 +466,36 @@ public class Board : MonoBehaviour
         b.StopAllCoroutines();
         b.StartCoroutine(b.MoveAnimation(new Vector2(toX, toY)));
     }
+
+    private IEnumerator AnimateAndDestroyMatches(List<(int x, int y)> positions)
+    {
+        // Verkleur
+        foreach (var pos in positions)
+        {
+            GameObject go = grid[pos.x, pos.y];
+            if (go != null)
+            {
+                SpriteRenderer sr = go.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.color = Color.black;
+                }
+            }
+        }
+
+        // Pauze
+        yield return new WaitForSeconds(0.3f);
+
+        // Destroy
+        foreach (var pos in positions)
+        {
+            GameObject go = grid[pos.x, pos.y];
+            if (go != null)
+            {
+                grid[pos.x, pos.y] = null;
+                Destroy(go);
+            }
+        }
+    }
+
 }
