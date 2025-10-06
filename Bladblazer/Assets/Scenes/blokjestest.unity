@@ -937,6 +937,8 @@ MonoBehaviour:
   - {fileID: 4297138597883612037, guid: 2f305c708b28fc140a24198cfd80fef0, type: 3}
   timer: 0
   timerActive: 0
+  matchSoundClip: {fileID: 8300000, guid: f2ee85d52bcafd048a01d897f32260ee, type: 3}
+  blockFallSoundClip: {fileID: 8300000, guid: 6391e8d53b178484c9eca0169c2a47ac, type: 3}
 --- !u!4 &1779891502
 Transform:
   m_ObjectHideFlags: 0
