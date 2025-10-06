@@ -109,6 +109,7 @@ MonoBehaviour:
   board: {fileID: 0}
   moveManager: {fileID: 0}
   colorId: 3
+  blockRemoveSoundClip: {fileID: 8300000, guid: 7e6bd648b47a82043a2524957b8ef6f4, type: 3}
 --- !u!61 &-8952480965811329652
 BoxCollider2D:
   m_ObjectHideFlags: 0

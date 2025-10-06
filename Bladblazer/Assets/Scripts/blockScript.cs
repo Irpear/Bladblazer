@@ -10,6 +10,8 @@ public class Block : MonoBehaviour
     public MoveManager moveManager;
     public int colorId;
 
+    public AudioClip blockRemoveSoundClip;
+
 
     void Start()
     {
@@ -94,6 +96,7 @@ public class Block : MonoBehaviour
             {
                 board.grid[x, y] = null;
                 Destroy(gameObject);
+                AudioSource.PlayClipAtPoint(blockRemoveSoundClip, transform.position);
                 Debug.Log(moveManager.gameIsOver);
             }
 

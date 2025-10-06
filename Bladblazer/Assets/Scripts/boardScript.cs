@@ -23,6 +23,9 @@ public class Board : MonoBehaviour
     private int playFieldOffsetX;
     private int playFieldOffsetY = 0; // Y blijft 0, buffer alleen boven
 
+    public AudioClip matchSoundClip;
+    public AudioClip blockFallSoundClip;
+
     void Start()
     {
         // Grid is groter dan speelveld voor buffer zones
@@ -270,6 +273,7 @@ public class Board : MonoBehaviour
                 {
                     removePositions.Add((x, y));
                     Debug.Log($"Match gevonden op: ({x}, {y})");
+                    AudioSource.PlayClipAtPoint(matchSoundClip, transform.position);
                 }
             }
         }
@@ -346,11 +350,13 @@ public class Board : MonoBehaviour
                         {
                             if (SlideDiagonalLine(x, y, -1, 0))
                                 anyMoved = true;
+                                AudioSource.PlayClipAtPoint(blockFallSoundClip, transform.position);
                         }
                         else if (upPressure > leftPressure && upPressure > 0)
                         {
                             if (SlideDiagonalLine(x, y, 0, 1))
                                 anyMoved = true;
+                                AudioSource.PlayClipAtPoint(blockFallSoundClip, transform.position);
                         }
                         else if (leftPressure > 0 || upPressure > 0)
                         {
@@ -358,11 +364,13 @@ public class Board : MonoBehaviour
                             {
                                 if (SlideDiagonalLine(x, y, -1, 0))
                                     anyMoved = true;
+                                    AudioSource.PlayClipAtPoint(blockFallSoundClip, transform.position);
                             }
                             else if (upPressure > 0)
                             {
                                 if (SlideDiagonalLine(x, y, 0, 1))
                                     anyMoved = true;
+                                    AudioSource.PlayClipAtPoint(blockFallSoundClip, transform.position);
                             }
                         }
                     }
