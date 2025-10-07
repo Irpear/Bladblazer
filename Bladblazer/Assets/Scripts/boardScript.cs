@@ -158,6 +158,7 @@ public class Board : MonoBehaviour
     {
         Debug.Log("=== CheckMatches() START ===");
         bool[,] mark = new bool[totalWidth, totalHeight];
+        int runLength = 0;
 
         // Check alleen binnen het speelveld (niet in buffer zones)
         // HORIZONTAAL
@@ -165,7 +166,6 @@ public class Board : MonoBehaviour
         {
             int runStartX = playFieldOffsetX;
             int runColor = -999;
-            int runLength = 0;
 
             for (int x = playFieldOffsetX; x < playFieldOffsetX + width; x++)
             {
@@ -174,6 +174,8 @@ public class Board : MonoBehaviour
                     if (runLength >= 3)
                     {
                         for (int k = runStartX; k < runStartX + runLength; k++) mark[k, y] = true;
+                        Debug.Log($"Runlength: {runLength}");
+                        GameEvents.OnBlocksRemoved.Invoke(runLength);
                     }
                     runLength = 0;
                     runColor = -999;
@@ -199,6 +201,8 @@ public class Board : MonoBehaviour
                     if (runLength >= 3)
                     {
                         for (int k = runStartX; k < runStartX + runLength; k++) mark[k, y] = true;
+                        Debug.Log($"Runlength: {runLength}");
+                        GameEvents.OnBlocksRemoved.Invoke(runLength);
                     }
                     runStartX = x;
                     runLength = 1;
@@ -217,7 +221,7 @@ public class Board : MonoBehaviour
         {
             int runStartY = 0;
             int runColor = -999;
-            int runLength = 0;
+
 
             for (int y = 0; y < height; y++)
             {
@@ -226,6 +230,8 @@ public class Board : MonoBehaviour
                     if (runLength >= 3)
                     {
                         for (int k = runStartY; k < runStartY + runLength; k++) mark[x, k] = true;
+                        Debug.Log($"Runlength: {runLength}");
+                        GameEvents.OnBlocksRemoved.Invoke(runLength);
                     }
                     runLength = 0;
                     runColor = -999;
@@ -251,6 +257,8 @@ public class Board : MonoBehaviour
                     if (runLength >= 3)
                     {
                         for (int k = runStartY; k < runStartY + runLength; k++) mark[x, k] = true;
+                        Debug.Log($"Runlength: {runLength}");
+                        GameEvents.OnBlocksRemoved.Invoke(runLength);
                     }
                     runStartY = y;
                     runLength = 1;
@@ -272,6 +280,7 @@ public class Board : MonoBehaviour
                 if (mark[x, y] && grid[x, y] != null)
                 {
                     removePositions.Add((x, y));
+                    GameEvents.OnBlocksRemoved.Invoke(runLength);
                     Debug.Log($"Match gevonden op: ({x}, {y})");
                     AudioSource.PlayClipAtPoint(matchSoundClip, transform.position);
                 }
