@@ -31,7 +31,7 @@ public class ScoreDisplay : MonoBehaviour
     private void UpdateScoreDisplay(int newScore)
     {
         // newScore is niks
-        scoreText.text = "Score: " + newScore;
+        scoreText.text = "" + newScore;
         Debug.Log("Score updated to: " + newScore);
     }
 }
