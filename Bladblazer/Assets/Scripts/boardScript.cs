@@ -280,7 +280,6 @@ public class Board : MonoBehaviour
                 if (mark[x, y] && grid[x, y] != null)
                 {
                     removePositions.Add((x, y));
-                    GameEvents.OnBlocksRemoved.Invoke(runLength);
                     Debug.Log($"Match gevonden op: ({x}, {y})");
                     AudioSource.PlayClipAtPoint(matchSoundClip, transform.position);
                 }

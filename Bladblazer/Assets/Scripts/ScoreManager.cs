@@ -5,7 +5,7 @@ public class ScoreManager: MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }
 
-    [SerializeField] private int pointsPerBlock = 100;
+    [SerializeField] public int pointsPerBlock = 100;
     private int currentScore = 0;
 
     public UnityEvent<int> OnScoreChanged;
@@ -36,7 +36,7 @@ public class ScoreManager: MonoBehaviour
         AddScore(scoreEarned);
     }
 
-    private void AddScore(int points)
+    public void AddScore(int points)
     {
         currentScore += points;
         OnScoreChanged?.Invoke(currentScore);

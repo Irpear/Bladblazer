@@ -8,6 +8,7 @@ public class Block : MonoBehaviour
 
     public Board board;
     public MoveManager moveManager;
+    public ScoreManager scoreManager;
     public int colorId;
 
     public AudioClip blockRemoveSoundClip;
@@ -17,6 +18,7 @@ public class Block : MonoBehaviour
     {
         board = FindFirstObjectByType<Board>();
         moveManager = FindFirstObjectByType<MoveManager>();
+        scoreManager = FindFirstObjectByType<ScoreManager>();
     }
 
     void Update()
@@ -96,6 +98,7 @@ public class Block : MonoBehaviour
             {
                 board.grid[x, y] = null;
                 Destroy(gameObject);
+                scoreManager.AddScore(1 * scoreManager.pointsPerBlock);
                 AudioSource.PlayClipAtPoint(blockRemoveSoundClip, transform.position);
                 Debug.Log(moveManager.gameIsOver);
             }
