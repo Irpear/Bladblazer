@@ -10,8 +10,11 @@ public class Block : MonoBehaviour
     public MoveManager moveManager;
     public ScoreManager scoreManager;
     public int colorId;
+    public float animDelay = 0.25f;
 
     public AudioClip blockRemoveSoundClip;
+
+    [SerializeField] private Animator animator;
 
 
     void Start()
@@ -96,20 +99,31 @@ public class Block : MonoBehaviour
             Debug.Log($"Block clicked at {x},{y}");
             if (board != null && !moveManager.gameIsOver && !board.timerActive)
             {
+                animator.SetBool("isRemoved", true);
+                // Animation speelt volgensmij wel, maar het block wordt te snel gedestroyed om het te zien.
                 board.grid[x, y] = null;
-                Destroy(gameObject);
                 scoreManager.AddScore(1 * scoreManager.pointsPerBlock);
                 AudioSource.PlayClipAtPoint(blockRemoveSoundClip, transform.position);
                 Debug.Log(moveManager.gameIsOver);
+
+                // DELAY VOOR HET LATEN ZIEN VAN DE ANIMATIE
+                StartCoroutine(DestroyAfterDelay(0.25f));
             }
 
             board.timer = 0.5f;
             board.timerActive = true;
 
             moveManager.UseMove();
-            board.StartCoroutine(board.ResolveMatches());
         }
 
+    }
+
+    private IEnumerator DestroyAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Destroy(gameObject);
+
+        board.StartCoroutine(board.ResolveMatches());
     }
 
 }

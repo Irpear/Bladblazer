@@ -26,6 +26,8 @@ public class Board : MonoBehaviour
     public AudioClip matchSoundClip;
     public AudioClip blockFallSoundClip;
 
+    public Block blockScript;
+
     void Start()
     {
         // Grid is groter dan speelveld voor buffer zones
@@ -34,6 +36,8 @@ public class Board : MonoBehaviour
         playFieldOffsetX = bufferSize; // Speelveld begint na de buffer
 
         grid = new GameObject[totalWidth, totalHeight];
+
+        blockScript = FindFirstObjectByType<Block>();
 
         FillBoard();
         FillBufferZones(); // Vul de buffer zones aan de start
@@ -310,6 +314,8 @@ public class Board : MonoBehaviour
 
     public IEnumerator ResolveMatches()
     {
+        // DELAY VOOR HET LATEN ZIEN VAN DE ANIMATIE
+        yield return new WaitForSeconds(0.25f);
         bool matchFound = true;
 
         while (matchFound)
