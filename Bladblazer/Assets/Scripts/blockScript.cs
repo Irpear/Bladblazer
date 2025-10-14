@@ -93,14 +93,13 @@ public class Block : MonoBehaviour
         // Maar dat werkt niet helemaal, je kan blokken dan niet meer weghalen zolang de timer actief is
         // Maar als je klikt gaan je moves nog steeds wel naar beneden, en de timer wordt dan weer gereset (ook al gaan er geen blokken weg)
 
-        if (!board.timerActive)
+        if (!board.timerActive && !board.isResolvingMatches)
         {
 
             Debug.Log($"Block clicked at {x},{y}");
             if (board != null && !moveManager.gameIsOver && !board.timerActive)
             {
                 animator.SetBool("isRemoved", true);
-                // Animation speelt volgensmij wel, maar het block wordt te snel gedestroyed om het te zien.
                 board.grid[x, y] = null;
                 scoreManager.AddScore(1 * scoreManager.pointsPerBlock);
                 AudioSource.PlayClipAtPoint(blockRemoveSoundClip, transform.position);

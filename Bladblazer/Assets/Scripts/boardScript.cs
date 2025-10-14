@@ -15,6 +15,8 @@ public class Board : MonoBehaviour
     public float timer = 0f;
     public bool timerActive = false;
 
+    public bool isResolvingMatches = false;
+
     // Totale grid grootte (speelveld + buffer)
     private int totalWidth;
     private int totalHeight;
@@ -286,6 +288,7 @@ public class Board : MonoBehaviour
                     removePositions.Add((x, y));
                     Debug.Log($"Match gevonden op: ({x}, {y})");
                     AudioSource.PlayClipAtPoint(matchSoundClip, transform.position);
+                    timer += 0.5f; // Verhoog timer bij elke match
                 }
             }
         }
@@ -314,6 +317,8 @@ public class Board : MonoBehaviour
 
     public IEnumerator ResolveMatches()
     {
+        isResolvingMatches = true;
+
         // DELAY VOOR HET LATEN ZIEN VAN DE ANIMATIE
         yield return new WaitForSeconds(0.25f);
         bool matchFound = true;
@@ -332,6 +337,8 @@ public class Board : MonoBehaviour
                 yield return new WaitForSeconds(0.3f); // Zelfde tijd als in AnimateAndDestroyMatches
             }
         }
+
+        isResolvingMatches = false;
     }
 
     // ============ GRAVITY SYSTEEM MET BUFFER SUPPORT ============
