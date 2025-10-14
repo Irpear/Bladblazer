@@ -58,4 +58,9 @@ public class MoveManager : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public void GoToStart()
+    {
+        SceneManager.LoadScene("StartScreen");
+    }
 }
