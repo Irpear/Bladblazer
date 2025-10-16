@@ -7,8 +7,12 @@ public class ScoreManager: MonoBehaviour
 
     [SerializeField] public int pointsPerBlock = 100;
     private int currentScore = 0;
+    private int highScore = 0;
+
+    private const string HIGH_SCORE_KEY = "HighScore";
 
     public UnityEvent<int> OnScoreChanged;
+    public UnityEvent<int> OnHighScoreChanged;
 
     private void Awake()
     {
@@ -18,6 +22,9 @@ public class ScoreManager: MonoBehaviour
             return;
         }
         Instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        LoadHighScore();
     }
 
     private void OnEnable()
@@ -42,10 +49,33 @@ public class ScoreManager: MonoBehaviour
         OnScoreChanged?.Invoke(currentScore);
     }
 
+    private void LoadHighScore()
+    {
+        highScore = PlayerPrefs.GetInt(HIGH_SCORE_KEY, 0);
+        OnHighScoreChanged?.Invoke(highScore);
+    }
+
+    public void CheckAndUpdateHighScore()
+    {
+        if (currentScore > highScore)
+        {
+            highScore = currentScore;
+            PlayerPrefs.SetInt(HIGH_SCORE_KEY, highScore);
+            PlayerPrefs.Save();
+            OnHighScoreChanged?.Invoke(highScore);
+        }
+    }
+
     public int GetCurrentScore()
     {
         Debug.Log("Current Score: " + currentScore);
         return currentScore;
+    }
+
+    public int GetHighScore()
+    {
+        Debug.Log("Highscore: " + highScore);
+        return highScore;
     }
 
     public void ResetScore()

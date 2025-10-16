@@ -52,6 +52,7 @@ public class MoveManager : MonoBehaviour
         Debug.Log("Game Over! No moves left.");
         gameOverScreen.SetActive(true);
         gameIsOver = true;
+        ScoreManager.Instance.CheckAndUpdateHighScore();
     }
 
     public void RestartGame()
