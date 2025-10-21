@@ -58,10 +58,12 @@ public class MoveManager : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        ScoreManager.Instance.ResetScore();
     }
 
     public void GoToStart()
     {
         SceneManager.LoadScene("StartScreen");
+        ScoreManager.Instance.ResetScore();
     }
 }
