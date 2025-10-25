@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -8,20 +9,24 @@ public class ScoreManager: MonoBehaviour
     [SerializeField] public int pointsPerBlock = 100;
     private int currentScore = 0;
     private int highScore = 0;
+    public float currentMultiplier = 1.0f;
 
     private const string HIGH_SCORE_KEY = "HighScore";
 
     public UnityEvent<int> OnScoreChanged;
     public UnityEvent<int> OnHighScoreChanged;
+    public UnityEvent<float> OnMultiplierChanged;
 
     private void Awake()
     {
+        Debug.Log("ScoreManager Awake called");
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
         Instance = this;
+        Debug.Log("ScoreManager Instance set");
         DontDestroyOnLoad(gameObject);
 
         LoadHighScore();
@@ -39,8 +44,21 @@ public class ScoreManager: MonoBehaviour
 
     private void HandleBlocksRemoved(int runLength)
     {
-        int scoreEarned = runLength * pointsPerBlock;
+        Debug.Log($"HandleBlockRemoved: BlockCOunt={runLength}, currentMultiplier={currentMultiplier}");
+        int scoreEarned = Mathf.RoundToInt(runLength * pointsPerBlock * currentMultiplier);
         AddScore(scoreEarned);
+    }
+
+    public void SetMultiplier(float multiplier)
+    {
+        currentMultiplier = multiplier;
+        Debug.Log("SetMultiplier called with" + multiplier);
+        OnMultiplierChanged?.Invoke(currentMultiplier);
+    }
+
+    public float GetMultiplier()
+    {
+        return currentMultiplier;
     }
 
     public void AddScore(int points)

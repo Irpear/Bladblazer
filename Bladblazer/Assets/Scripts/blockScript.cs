@@ -101,7 +101,8 @@ public class Block : MonoBehaviour
             {
                 animator.SetBool("isRemoved", true);
                 board.grid[x, y] = null;
-                scoreManager.AddScore(1 * scoreManager.pointsPerBlock);
+                int BlockClickScore = Mathf.RoundToInt(1 * scoreManager.pointsPerBlock * scoreManager.currentMultiplier);
+                scoreManager.AddScore(BlockClickScore);
                 AudioSource.PlayClipAtPoint(blockRemoveSoundClip, transform.position);
                 Debug.Log(moveManager.gameIsOver);
 

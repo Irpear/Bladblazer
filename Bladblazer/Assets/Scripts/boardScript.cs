@@ -160,9 +160,10 @@ public class Board : MonoBehaviour
         }
     }
 
-    public bool CheckMatches()
+    public List <int> CheckMatches()
     {
         Debug.Log("=== CheckMatches() START ===");
+        List<int> matchLengths = new List<int>();
         bool[,] mark = new bool[totalWidth, totalHeight];
         int runLength = 0;
 
@@ -181,7 +182,7 @@ public class Board : MonoBehaviour
                     {
                         for (int k = runStartX; k < runStartX + runLength; k++) mark[k, y] = true;
                         Debug.Log($"Runlength: {runLength}");
-                        GameEvents.OnBlocksRemoved.Invoke(runLength);
+                        matchLengths.Add(runLength);
                     }
                     runLength = 0;
                     runColor = -999;
@@ -208,7 +209,7 @@ public class Board : MonoBehaviour
                     {
                         for (int k = runStartX; k < runStartX + runLength; k++) mark[k, y] = true;
                         Debug.Log($"Runlength: {runLength}");
-                        GameEvents.OnBlocksRemoved.Invoke(runLength);
+                        matchLengths.Add(runLength);
                     }
                     runStartX = x;
                     runLength = 1;
@@ -237,7 +238,7 @@ public class Board : MonoBehaviour
                     {
                         for (int k = runStartY; k < runStartY + runLength; k++) mark[x, k] = true;
                         Debug.Log($"Runlength: {runLength}");
-                        GameEvents.OnBlocksRemoved.Invoke(runLength);
+                        matchLengths.Add(runLength);
                     }
                     runLength = 0;
                     runColor = -999;
@@ -264,7 +265,7 @@ public class Board : MonoBehaviour
                     {
                         for (int k = runStartY; k < runStartY + runLength; k++) mark[x, k] = true;
                         Debug.Log($"Runlength: {runLength}");
-                        GameEvents.OnBlocksRemoved.Invoke(runLength);
+                        matchLengths.Add(runLength);
                     }
                     runStartY = y;
                     runLength = 1;
@@ -312,30 +313,64 @@ public class Board : MonoBehaviour
             }
         }
 
-        return removePositions.Count > 0;
+        return matchLengths;
     }
 
     public IEnumerator ResolveMatches()
     {
         isResolvingMatches = true;
-
-        // DELAY VOOR HET LATEN ZIEN VAN DE ANIMATIE
         yield return new WaitForSeconds(0.25f);
-        bool matchFound = true;
 
-        while (matchFound)
+        // Always apply gravity first after a block is removed
+        ApplyGravity();
+        FillBufferZones();
+        yield return new WaitForSeconds(0.6f);
+
+        // NOW check if that created any matches
+        List<int> matchLengths = CheckMatches();
+
+        if (matchLengths.Count > 0)
         {
-            ApplyGravity();
-            FillBufferZones();
-            yield return new WaitForSeconds(0.6f);
+            // Matches found after the move - increase multiplier
+            float currentMultiplier = ScoreManager.Instance.GetMultiplier();
+            ScoreManager.Instance.SetMultiplier(currentMultiplier + 0.1f);
+            Debug.Log("Multiplier set to: " + ScoreManager.Instance.GetMultiplier());
 
-            matchFound = CheckMatches();
-
-            // NIEUW: Wacht tot de animatie klaar is voordat we doorgaan
-            if (matchFound)
+            // Score all the matches
+            foreach (int matchLength in matchLengths)
             {
-                yield return new WaitForSeconds(0.3f); // Zelfde tijd als in AnimateAndDestroyMatches
+                GameEvents.OnBlocksRemoved.Invoke(matchLength);
             }
+            yield return new WaitForSeconds(0.3f);
+
+            // Continue checking for cascades
+            while (matchLengths.Count > 0)
+            {
+                ApplyGravity();
+                FillBufferZones();
+                yield return new WaitForSeconds(0.6f);
+                matchLengths = CheckMatches();
+
+                if (matchLengths.Count > 0)
+                {
+                    // More cascades - keep the multiplier increasing
+                    currentMultiplier = ScoreManager.Instance.GetMultiplier();
+                    ScoreManager.Instance.SetMultiplier(currentMultiplier + 0.1f);
+                    Debug.Log("Multiplier set to: " + ScoreManager.Instance.GetMultiplier());
+
+                    foreach (int matchLength in matchLengths)
+                    {
+                        GameEvents.OnBlocksRemoved.Invoke(matchLength);
+                    }
+                    yield return new WaitForSeconds(0.3f);
+                }
+            }
+        }
+        else
+        {
+            // No matches after the move - reset multiplier
+            ScoreManager.Instance.SetMultiplier(1.0f);
+            Debug.Log("Multiplier reset to 1.0");
         }
 
         isResolvingMatches = false;
