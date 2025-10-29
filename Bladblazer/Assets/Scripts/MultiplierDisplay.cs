@@ -1,4 +1,6 @@
+using System.Collections;
 using TMPro;
+using Unity.Jobs;
 using UnityEngine;
 
 public class MultiplierDisplay : MonoBehaviour
@@ -51,7 +53,42 @@ public class MultiplierDisplay : MonoBehaviour
         {
             multiplierText.text = "x" + newMultiplier.ToString("F1");
             multiplierText.enabled = (newMultiplier > 1.0f);
+
+            if (newMultiplier > 1.0f)
+            {
+                StartCoroutine(PulseAnimation());
+            }
         }
 
     }
+
+    private IEnumerator PulseAnimation()
+    {
+        Vector3 originalScale = Vector3.one;
+        Vector3 targetScale = originalScale * 1.2f;
+
+        float duration = 0.5f;
+        float elapsed = 0f;
+
+        while (elapsed < duration / 2)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / (duration / 2);
+            transform.localScale = Vector3.Lerp(originalScale, targetScale, t);
+            yield return null;
+        }
+
+        elapsed = 0f;
+
+        while (elapsed < duration / 2)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / (duration / 2);
+            transform.localScale = Vector3.Lerp(targetScale, originalScale, t);
+            yield return null;
+        }
+
+        transform.localScale = originalScale;
+    }
+
 }
