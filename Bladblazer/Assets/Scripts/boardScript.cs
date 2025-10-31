@@ -170,19 +170,19 @@ public class Board : MonoBehaviour
         }
     }
 
-    public List <int> CheckMatches()
+    public (List<int> matchLengths, List<bool> isDiscoMatch) CheckMatches()
     {
         Debug.Log("=== CheckMatches() START ===");
         List<int> matchLengths = new List<int>();
+        List<bool> isDiscoMatch = new List<bool>();
         bool[,] mark = new bool[totalWidth, totalHeight];
-        int runLength = 0;
 
-        // Check alleen binnen het speelveld (niet in buffer zones)
         // HORIZONTAAL
         for (int y = 0; y < height; y++)
         {
             int runStartX = playFieldOffsetX;
             int runColor = -999;
+            int runLength = 0;
 
             for (int x = playFieldOffsetX; x < playFieldOffsetX + width; x++)
             {
@@ -193,6 +193,7 @@ public class Board : MonoBehaviour
                         for (int k = runStartX; k < runStartX + runLength; k++) mark[k, y] = true;
                         Debug.Log($"Runlength: {runLength}");
                         matchLengths.Add(runLength);
+                        isDiscoMatch.Add(runColor == 9);
                     }
                     runLength = 0;
                     runColor = -999;
@@ -220,6 +221,7 @@ public class Board : MonoBehaviour
                         for (int k = runStartX; k < runStartX + runLength; k++) mark[k, y] = true;
                         Debug.Log($"Runlength: {runLength}");
                         matchLengths.Add(runLength);
+                        isDiscoMatch.Add(runColor == 9);
                     }
                     runStartX = x;
                     runLength = 1;
@@ -230,6 +232,8 @@ public class Board : MonoBehaviour
             if (runLength >= 3)
             {
                 for (int k = runStartX; k < runStartX + runLength; k++) mark[k, y] = true;
+                matchLengths.Add(runLength);
+                isDiscoMatch.Add(runColor == 9);
             }
         }
 
@@ -238,7 +242,7 @@ public class Board : MonoBehaviour
         {
             int runStartY = 0;
             int runColor = -999;
-
+            int runLength = 0;
 
             for (int y = 0; y < height; y++)
             {
@@ -249,6 +253,7 @@ public class Board : MonoBehaviour
                         for (int k = runStartY; k < runStartY + runLength; k++) mark[x, k] = true;
                         Debug.Log($"Runlength: {runLength}");
                         matchLengths.Add(runLength);
+                        isDiscoMatch.Add(runColor == 9);
                     }
                     runLength = 0;
                     runColor = -999;
@@ -276,6 +281,7 @@ public class Board : MonoBehaviour
                         for (int k = runStartY; k < runStartY + runLength; k++) mark[x, k] = true;
                         Debug.Log($"Runlength: {runLength}");
                         matchLengths.Add(runLength);
+                        isDiscoMatch.Add(runColor == 9);
                     }
                     runStartY = y;
                     runLength = 1;
@@ -286,6 +292,8 @@ public class Board : MonoBehaviour
             if (runLength >= 3)
             {
                 for (int k = runStartY; k < runStartY + runLength; k++) mark[x, k] = true;
+                matchLengths.Add(runLength);
+                isDiscoMatch.Add(runColor == 9);
             }
         }
 
@@ -299,7 +307,7 @@ public class Board : MonoBehaviour
                     removePositions.Add((x, y));
                     Debug.Log($"Match gevonden op: ({x}, {y})");
                     AudioSource.PlayClipAtPoint(matchSoundClip, transform.position);
-                    timer += 0.5f; // Verhoog timer bij elke match
+                    timer += 0.5f;
                 }
             }
         }
@@ -312,7 +320,6 @@ public class Board : MonoBehaviour
             StartCoroutine(AnimateAndDestroyMatches(removePositions));
         }
 
-        // Als er matches waren, geef bonus move
         if (removePositions.Count >= 3)
         {
             MoveManager moveManager = FindFirstObjectByType<MoveManager>();
@@ -323,7 +330,7 @@ public class Board : MonoBehaviour
             }
         }
 
-        return matchLengths;
+        return (matchLengths, isDiscoMatch);
     }
 
     public IEnumerator ResolveMatches()
@@ -331,46 +338,52 @@ public class Board : MonoBehaviour
         isResolvingMatches = true;
         yield return new WaitForSeconds(0.25f);
 
-        // Always apply gravity first after a block is removed
         ApplyGravity();
         FillBufferZones();
         yield return new WaitForSeconds(0.6f);
 
-        // NOW check if that created any matches
-        List<int> matchLengths = CheckMatches();
+        var (matchLengths, isDiscoMatch) = CheckMatches();
 
         if (matchLengths.Count > 0)
         {
-            // Matches found after the move - increase multiplier
             float currentMultiplier = ScoreManager.Instance.GetMultiplier();
             ScoreManager.Instance.SetMultiplier(currentMultiplier + 0.1f);
             Debug.Log("Multiplier set to: " + ScoreManager.Instance.GetMultiplier());
 
-            // Score all the matches
-            foreach (int matchLength in matchLengths)
+            for (int i = 0; i < matchLengths.Count; i++)
             {
-                GameEvents.OnBlocksRemoved.Invoke(matchLength);
+                int baseScore = matchLengths[i];
+                if (isDiscoMatch[i])
+                {
+                    baseScore += 27; // plus 27 is 2700 punten, plus de normale 300 is dit dus 10 keer zoveel punten. verander ook hieronder.
+                    Debug.Log("DISCO MATCH BONUS!");
+                }
+                GameEvents.OnBlocksRemoved.Invoke(baseScore);
             }
             yield return new WaitForSeconds(0.3f);
 
-            // Continue checking for cascades
             while (matchLengths.Count > 0)
             {
                 ApplyGravity();
                 FillBufferZones();
                 yield return new WaitForSeconds(0.6f);
-                matchLengths = CheckMatches();
+                (matchLengths, isDiscoMatch) = CheckMatches();
 
                 if (matchLengths.Count > 0)
                 {
-                    // More cascades - keep the multiplier increasing
                     currentMultiplier = ScoreManager.Instance.GetMultiplier();
                     ScoreManager.Instance.SetMultiplier(currentMultiplier + 0.1f);
                     Debug.Log("Multiplier set to: " + ScoreManager.Instance.GetMultiplier());
 
-                    foreach (int matchLength in matchLengths)
+                    for (int i = 0; i < matchLengths.Count; i++)
                     {
-                        GameEvents.OnBlocksRemoved.Invoke(matchLength);
+                        int baseScore = matchLengths[i];
+                        if (isDiscoMatch[i])
+                        {
+                            baseScore += 27; // hierzo
+                            Debug.Log("DISCO MATCH BONUS!");
+                        }
+                        GameEvents.OnBlocksRemoved.Invoke(baseScore);
                     }
                     yield return new WaitForSeconds(0.3f);
                 }
@@ -378,7 +391,6 @@ public class Board : MonoBehaviour
         }
         else
         {
-            // No matches after the move - reset multiplier
             ScoreManager.Instance.SetMultiplier(1.0f);
             Debug.Log("Multiplier reset to 1.0");
         }
