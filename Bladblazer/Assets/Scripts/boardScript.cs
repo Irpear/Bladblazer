@@ -103,10 +103,20 @@ public class Board : MonoBehaviour
     void SpawnBlock(int x, int y, bool isBuffer = false)
     {
         int maxAttempts = 10;
-        int prefabIndex = Random.Range(0, blockPrefabs.Length);
+        int prefabIndex;
 
-        // Alleen match-preventie doen in het speelveld, niet in buffer
-        if (!isBuffer)
+        // EERST: Check of het een disco blok wordt (1 op 100)
+        int disco = Random.Range(0, 100);
+        if (disco == 42) 
+        {
+            prefabIndex = 9; // Disco block
+        }
+        else
+        {
+            prefabIndex = Random.Range(0, 8); // Normaal blok
+        }
+
+        if (!isBuffer && prefabIndex != 9)
         {
             for (int attempt = 0; attempt < maxAttempts; attempt++)
             {
@@ -133,7 +143,7 @@ public class Board : MonoBehaviour
                     break;
                 }
 
-                prefabIndex = Random.Range(0, blockPrefabs.Length);
+                prefabIndex = Random.Range(0, 8);
             }
         }
 
