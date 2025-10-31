@@ -1294,6 +1294,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6abb04a8bee2cd4fa4244ae1b2feb01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
+  scorePopupPrefab: {fileID: 2799016384966259626, guid: d2d7bcecedce28249ba6fab18b91c5e0, type: 3}
+  canvas: {fileID: 512741309}
   width: 12
   height: 12
   bufferSize: 3
@@ -1314,6 +1316,7 @@ MonoBehaviour:
   matchSoundClip: {fileID: 8300000, guid: f2ee85d52bcafd048a01d897f32260ee, type: 3}
   blockFallSoundClip: {fileID: 8300000, guid: 6391e8d53b178484c9eca0169c2a47ac, type: 3}
   blockScript: {fileID: 0}
+  scoreManager: {fileID: 0}
 --- !u!4 &1779891502
 Transform:
   m_ObjectHideFlags: 0

@@ -1,9 +1,13 @@
+using NUnit.Framework.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Board : MonoBehaviour
 {
+    [SerializeField] private GameObject scorePopupPrefab;
+    [SerializeField] private Canvas canvas;
+
     [Header("Board Settings")]
     public int width = 12;          // Speelveld breedte
     public int height = 12;         // Speelveld hoogte
@@ -29,6 +33,7 @@ public class Board : MonoBehaviour
     public AudioClip blockFallSoundClip;
 
     public Block blockScript;
+    public ScoreManager scoreManager;
 
     void Start()
     {
@@ -40,6 +45,7 @@ public class Board : MonoBehaviour
         grid = new GameObject[totalWidth, totalHeight];
 
         blockScript = FindFirstObjectByType<Block>();
+        scoreManager = FindFirstObjectByType<ScoreManager>();
 
         FillBoard();
         FillBufferZones(); // Vul de buffer zones aan de start
@@ -193,6 +199,13 @@ public class Board : MonoBehaviour
                         for (int k = runStartX; k < runStartX + runLength; k++) mark[k, y] = true;
                         Debug.Log($"Runlength: {runLength}");
                         matchLengths.Add(runLength);
+
+                        // Bereken het middelpunt van de match
+                        float centerX = runStartX + (runLength -1 ) / 2.0f;
+                        float centerY = y;
+                        Vector3 centerPos = new Vector3(centerX, centerY, 0);
+
+                        SpawnScorePopup(runLength, centerPos);
                         isDiscoMatch.Add(runColor == 9);
                     }
                     runLength = 0;
@@ -221,6 +234,13 @@ public class Board : MonoBehaviour
                         for (int k = runStartX; k < runStartX + runLength; k++) mark[k, y] = true;
                         Debug.Log($"Runlength: {runLength}");
                         matchLengths.Add(runLength);
+
+                        // Bereken het middelpunt van de match
+                        float centerX = runStartX + (runLength - 1) / 2.0f;
+                        float centerY = y;
+                        Vector3 centerPos = new Vector3(centerX, centerY, 0);
+
+                        SpawnScorePopup(runLength, centerPos);
                         isDiscoMatch.Add(runColor == 9);
                     }
                     runStartX = x;
@@ -233,6 +253,14 @@ public class Board : MonoBehaviour
             {
                 for (int k = runStartX; k < runStartX + runLength; k++) mark[k, y] = true;
                 matchLengths.Add(runLength);
+
+                // Bereken het middelpunt van de match
+                float centerX = runStartX + (runLength - 1) / 2.0f;
+                float centerY = y;
+                Vector3 centerPos = new Vector3(centerX, centerY, 0);
+
+                SpawnScorePopup(runLength, centerPos);
+
                 isDiscoMatch.Add(runColor == 9);
             }
         }
@@ -240,7 +268,7 @@ public class Board : MonoBehaviour
         // VERTICAAL
         for (int x = playFieldOffsetX; x < playFieldOffsetX + width; x++)
         {
-            int runStartY = 0;
+            int runStartY = playFieldOffsetY;
             int runColor = -999;
             int runLength = 0;
 
@@ -250,9 +278,20 @@ public class Board : MonoBehaviour
                 {
                     if (runLength >= 3)
                     {
+                        Debug.Log($"Vertical match: x={x}, runStartY={runStartY}, runLength={runLength}, calculated centerY={runStartY + (runLength - 1) / 2.0f}");
+
                         for (int k = runStartY; k < runStartY + runLength; k++) mark[x, k] = true;
+                        //Debug.Log($"Marking vertical match at grid position ({x}, {k})");
                         Debug.Log($"Runlength: {runLength}");
                         matchLengths.Add(runLength);
+
+                        // Bereken het middelpunt van de match
+                        float centerX = x;
+                        float centerY = runStartY + (runLength - 1) / 2.0f;
+                        Vector3 centerPos = new Vector3(centerX, centerY, 0);
+
+                        SpawnScorePopup(runLength, centerPos);
+                        Debug.Log("centerY: " + centerY);
                         isDiscoMatch.Add(runColor == 9);
                     }
                     runLength = 0;
@@ -278,9 +317,19 @@ public class Board : MonoBehaviour
                 {
                     if (runLength >= 3)
                     {
+                        Debug.Log($"Vertical match: x={x}, runStartY={runStartY}, runLength={runLength}, calculated centerY={runStartY + (runLength - 1) / 2.0f}");
+
                         for (int k = runStartY; k < runStartY + runLength; k++) mark[x, k] = true;
                         Debug.Log($"Runlength: {runLength}");
                         matchLengths.Add(runLength);
+
+                        // Bereken het middelpunt van de match
+                        float centerX = x;
+                        float centerY = runStartY + (runLength - 1) / 2.0f;
+                        Vector3 centerPos = new Vector3(centerX, centerY, 0);
+
+                        SpawnScorePopup(runLength, centerPos);
+                        Debug.Log("centerY: " + centerY);
                         isDiscoMatch.Add(runColor == 9);
                     }
                     runStartY = y;
@@ -293,6 +342,14 @@ public class Board : MonoBehaviour
             {
                 for (int k = runStartY; k < runStartY + runLength; k++) mark[x, k] = true;
                 matchLengths.Add(runLength);
+
+                // Bereken het middelpunt van de match
+                float centerX = x;
+                float centerY = runStartY + (runLength - 1) / 2.0f;
+                Vector3 centerPos = new Vector3(centerX, centerY, 0);
+
+                SpawnScorePopup(runLength, centerPos);
+
                 isDiscoMatch.Add(runColor == 9);
             }
         }
@@ -582,6 +639,25 @@ public class Board : MonoBehaviour
                 Destroy(go);
             }
         }
+    }
+
+    private void SpawnScorePopup(int runLength, Vector3 centerPos)
+    {
+        Debug.Log($"SpawnScorePopup called: runLength={runLength}, centerPos={centerPos}");
+
+
+        float popupScore = (runLength * scoreManager.pointsPerBlock * ScoreManager.Instance.GetMultiplier());
+        Debug.Log($"Calculated score: {popupScore}");
+
+        GameObject popupObj = Instantiate(scorePopupPrefab, canvas.transform);
+        Debug.Log($"Popup instantiated: {popupObj != null}");
+
+        ScorePopup popup = popupObj.GetComponent<ScorePopup>();
+        Debug.Log($"ScorePopup component found: {popup != null}");
+
+        popup.Initialize(Mathf.RoundToInt(popupScore), centerPos);
+        Debug.Log("Initialize called");
+
     }
 
 }
