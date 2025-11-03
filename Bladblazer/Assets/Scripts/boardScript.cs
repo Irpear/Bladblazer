@@ -112,8 +112,8 @@ public class Board : MonoBehaviour
         int prefabIndex;
 
         // EERST: Check of het een disco blok wordt (1 op 100)
-        int disco = Random.Range(0, 100);
-        if (disco == 42) 
+        int disco = Random.Range(0, 5);
+        if (disco == 3) 
         {
             prefabIndex = 9; // Disco block
         }
@@ -176,11 +176,12 @@ public class Board : MonoBehaviour
         }
     }
 
-    public (List<int> matchLengths, List<bool> isDiscoMatch) CheckMatches()
+    public (List<int> matchLengths, List<bool> isDiscoMatch, List<Vector3> matchCenters) CheckMatches()
     {
         Debug.Log("=== CheckMatches() START ===");
         List<int> matchLengths = new List<int>();
         List<bool> isDiscoMatch = new List<bool>();
+        List<Vector3> matchCenters = new List<Vector3>();
         bool[,] mark = new bool[totalWidth, totalHeight];
 
         // HORIZONTAAL
@@ -204,8 +205,8 @@ public class Board : MonoBehaviour
                         float centerX = runStartX + (runLength -1 ) / 2.0f;
                         float centerY = y;
                         Vector3 centerPos = new Vector3(centerX, centerY, 0);
+                        matchCenters.Add(centerPos);
 
-                        SpawnScorePopup(runLength, centerPos);
                         isDiscoMatch.Add(runColor == 9);
                     }
                     runLength = 0;
@@ -239,8 +240,9 @@ public class Board : MonoBehaviour
                         float centerX = runStartX + (runLength - 1) / 2.0f;
                         float centerY = y;
                         Vector3 centerPos = new Vector3(centerX, centerY, 0);
+                        matchCenters.Add(centerPos);
 
-                        SpawnScorePopup(runLength, centerPos);
+
                         isDiscoMatch.Add(runColor == 9);
                     }
                     runStartX = x;
@@ -258,8 +260,8 @@ public class Board : MonoBehaviour
                 float centerX = runStartX + (runLength - 1) / 2.0f;
                 float centerY = y;
                 Vector3 centerPos = new Vector3(centerX, centerY, 0);
+                matchCenters.Add(centerPos);
 
-                SpawnScorePopup(runLength, centerPos);
 
                 isDiscoMatch.Add(runColor == 9);
             }
@@ -289,9 +291,8 @@ public class Board : MonoBehaviour
                         float centerX = x;
                         float centerY = runStartY + (runLength - 1) / 2.0f;
                         Vector3 centerPos = new Vector3(centerX, centerY, 0);
+                        matchCenters.Add(centerPos);
 
-                        SpawnScorePopup(runLength, centerPos);
-                        Debug.Log("centerY: " + centerY);
                         isDiscoMatch.Add(runColor == 9);
                     }
                     runLength = 0;
@@ -327,9 +328,8 @@ public class Board : MonoBehaviour
                         float centerX = x;
                         float centerY = runStartY + (runLength - 1) / 2.0f;
                         Vector3 centerPos = new Vector3(centerX, centerY, 0);
+                        matchCenters.Add(centerPos);
 
-                        SpawnScorePopup(runLength, centerPos);
-                        Debug.Log("centerY: " + centerY);
                         isDiscoMatch.Add(runColor == 9);
                     }
                     runStartY = y;
@@ -347,8 +347,7 @@ public class Board : MonoBehaviour
                 float centerX = x;
                 float centerY = runStartY + (runLength - 1) / 2.0f;
                 Vector3 centerPos = new Vector3(centerX, centerY, 0);
-
-                SpawnScorePopup(runLength, centerPos);
+                matchCenters.Add(centerPos);
 
                 isDiscoMatch.Add(runColor == 9);
             }
@@ -387,7 +386,7 @@ public class Board : MonoBehaviour
             }
         }
 
-        return (matchLengths, isDiscoMatch);
+        return (matchLengths, isDiscoMatch, matchCenters);
     }
 
     public IEnumerator ResolveMatches()
@@ -399,7 +398,7 @@ public class Board : MonoBehaviour
         FillBufferZones();
         yield return new WaitForSeconds(0.6f);
 
-        var (matchLengths, isDiscoMatch) = CheckMatches();
+        var (matchLengths, isDiscoMatch, matchCenters) = CheckMatches();
 
         if (matchLengths.Count > 0)
         {
@@ -409,13 +408,22 @@ public class Board : MonoBehaviour
 
             for (int i = 0; i < matchLengths.Count; i++)
             {
-                int baseScore = matchLengths[i];
-                if (isDiscoMatch[i])
+                int runLength = matchLengths[i];
+                bool disco = isDiscoMatch[i];
+                Vector3 centerPos = matchCenters[i];
+
+                int finalScore = runLength * scoreManager.pointsPerBlock;
+                if (disco)
                 {
-                    baseScore += 27; // plus 27 is 2700 punten, plus de normale 300 is dit dus 10 keer zoveel punten. verander ook hieronder.
+                    finalScore *= 10;
                     Debug.Log("DISCO MATCH BONUS!");
                 }
-                GameEvents.OnBlocksRemoved.Invoke(baseScore);
+
+                finalScore = Mathf.RoundToInt(finalScore * ScoreManager.Instance.GetMultiplier());
+
+                GameEvents.OnBlocksRemoved.Invoke(finalScore);
+
+                SpawnScorePopup(finalScore, centerPos);
             }
             yield return new WaitForSeconds(0.3f);
 
@@ -424,7 +432,7 @@ public class Board : MonoBehaviour
                 ApplyGravity();
                 FillBufferZones();
                 yield return new WaitForSeconds(0.6f);
-                (matchLengths, isDiscoMatch) = CheckMatches();
+                (matchLengths, isDiscoMatch, matchCenters) = CheckMatches();
 
                 if (matchLengths.Count > 0)
                 {
@@ -434,13 +442,22 @@ public class Board : MonoBehaviour
 
                     for (int i = 0; i < matchLengths.Count; i++)
                     {
-                        int baseScore = matchLengths[i];
-                        if (isDiscoMatch[i])
+                        int runLength = matchLengths[i];
+                        bool disco = isDiscoMatch[i];
+                        Vector3 centerPos = matchCenters[i];
+
+                        int finalScore = runLength * scoreManager.pointsPerBlock;
+                        if (disco)
                         {
-                            baseScore += 27; // hierzo
+                            finalScore *= 10;
                             Debug.Log("DISCO MATCH BONUS!");
                         }
-                        GameEvents.OnBlocksRemoved.Invoke(baseScore);
+
+                        finalScore = Mathf.RoundToInt(finalScore * ScoreManager.Instance.GetMultiplier());
+
+                        GameEvents.OnBlocksRemoved.Invoke(finalScore);
+
+                        SpawnScorePopup(finalScore, centerPos);
                     }
                     yield return new WaitForSeconds(0.3f);
                 }
@@ -641,21 +658,15 @@ public class Board : MonoBehaviour
         }
     }
 
-    private void SpawnScorePopup(int runLength, Vector3 centerPos)
+    private void SpawnScorePopup(int scoreAmount, Vector3 centerPos)
     {
-        Debug.Log($"SpawnScorePopup called: runLength={runLength}, centerPos={centerPos}");
-
-
-        float popupScore = (runLength * scoreManager.pointsPerBlock * ScoreManager.Instance.GetMultiplier());
-        Debug.Log($"Calculated score: {popupScore}");
-
         GameObject popupObj = Instantiate(scorePopupPrefab, canvas.transform);
         Debug.Log($"Popup instantiated: {popupObj != null}");
 
         ScorePopup popup = popupObj.GetComponent<ScorePopup>();
         Debug.Log($"ScorePopup component found: {popup != null}");
 
-        popup.Initialize(Mathf.RoundToInt(popupScore), centerPos);
+        popup.Initialize(scoreAmount, centerPos);
         Debug.Log("Initialize called");
 
     }
