@@ -112,8 +112,8 @@ public class Board : MonoBehaviour
         int prefabIndex;
 
         // EERST: Check of het een disco blok wordt (1 op 100)
-        int disco = Random.Range(0, 5);
-        if (disco == 3) 
+        int disco = Random.Range(0, 100);
+        if (disco == 42) 
         {
             prefabIndex = 9; // Disco block
         }
