@@ -788,10 +788,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
   pointsPerBlock: 100
+  currentMultiplier: 1
   OnScoreChanged:
     m_PersistentCalls:
       m_Calls: []
   OnHighScoreChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnMultiplierChanged:
     m_PersistentCalls:
       m_Calls: []
 --- !u!4 &1702778749
@@ -956,7 +960,7 @@ GameObject:
   - component: {fileID: 1763920654}
   - component: {fileID: 1763920658}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: MenuCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

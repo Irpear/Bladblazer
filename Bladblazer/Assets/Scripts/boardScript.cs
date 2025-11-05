@@ -2,6 +2,7 @@ using NUnit.Framework.Interfaces;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Board : MonoBehaviour
 {
@@ -37,6 +38,7 @@ public class Board : MonoBehaviour
 
     void Start()
     {
+
         // Grid is groter dan speelveld voor buffer zones
         totalWidth = width + bufferSize;
         totalHeight = height + bufferSize;
