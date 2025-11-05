@@ -11,7 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StartScreen.unity
     guid: 12356f7e61d645d40b13ce7bad129759
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/blokjestest.unity
     guid: 633875a8217b41c4390948fd9ea1ce64
   m_configObjects:

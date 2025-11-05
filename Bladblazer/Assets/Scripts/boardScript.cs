@@ -38,7 +38,6 @@ public class Board : MonoBehaviour
 
     void Start()
     {
-
         // Grid is groter dan speelveld voor buffer zones
         totalWidth = width + bufferSize;
         totalHeight = height + bufferSize;
