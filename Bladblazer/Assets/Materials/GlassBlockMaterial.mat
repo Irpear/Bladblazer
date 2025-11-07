@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: GlassBlockMaterial
-  m_Shader: {fileID: 4800000, guid: e260cfa7296ee7642b167f1eb5be5023, type: 3}
+  m_Shader: {fileID: 4800000, guid: 83c5904fde910e548bb1af79e246a276, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -41,10 +41,27 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _DistanceFalloff: 0
+    - _EdgeDarkening: 0.4
+    - _EdgeDarkness: 0.2
+    - _EdgeWidth: 0.12
     - _EnableExternalAlpha: 0
+    - _GlassTransparency: 0
+    - _InternalAngleSharpness: 5
+    - _InternalReflectionStrength: 0
+    - _InternalTintStrength: 0.5
+    - _ShimmerSpeed: 0.47
+    - _ShimmerStrength: 0.312
+    - _ShineStrength: 0.2
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _InternalReflectionColor: {r: 1, g: 1, b: 1, a: 1}
+    - _InternalTintColor: {r: 1, g: 0.8, b: 1, a: 1}
+    - _LightDir: {r: 0.3, g: 0.8, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShineColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Tint: {r: 1, g: 1, b: 1, a: 1}
+    - _WorldLightPos: {r: 10.03, g: 4.11, b: 0.2, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
