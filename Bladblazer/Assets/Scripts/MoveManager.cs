@@ -1,11 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
 
 public class MoveManager : MonoBehaviour
 {
 
-    public int totalMoves = 10;
+    public int totalMoves;
     private int movesLeft;
     public Text movesText;
     public bool gameIsOver = false;
@@ -17,7 +18,23 @@ public class MoveManager : MonoBehaviour
     void Start()
     {
         board = FindFirstObjectByType<Board>();
+
+        if (GameSettings.Difficulty == 0)
+        {
+            totalMoves = 10;
+        }
+        else if (GameSettings.Difficulty == 1)
+        {
+            totalMoves = 8;
+        }
+        else if (GameSettings.Difficulty == 2)
+        {
+            totalMoves = 5;
+        }
+
+        
         movesLeft = totalMoves;
+        UpdateMovesUI();
     }
 
     public void UseMove()

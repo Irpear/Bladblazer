@@ -109,6 +109,11 @@ public class ScoreManager : MonoBehaviour
         currentScore = 0;
         OnScoreChanged?.Invoke(currentScore);
     }
+
+    public int GetHighScoreForCurrentDifficulty()
+    {
+        return highScores[GameSettings.Difficulty];
+    }
 }
 
 

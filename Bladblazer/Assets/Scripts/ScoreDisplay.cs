@@ -5,6 +5,7 @@ public class ScoreDisplay : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI highScoreText;
+    [SerializeField] private TextMeshProUGUI currentDifficultyHighScoreText;
 
     private void Start()
     {
@@ -59,11 +60,19 @@ public class ScoreDisplay : MonoBehaviour
         int easyHigh = PlayerPrefs.GetInt("HighScore_0", 0);
         int normalHigh = PlayerPrefs.GetInt("HighScore_1", 0);
         int hardHigh = PlayerPrefs.GetInt("HighScore_2", 0);
+        int currentHigh = PlayerPrefs.GetInt($"HighScore_{GameSettings.Difficulty}", 0);
+
 
         highScoreText.text =
             $"<b>Easy highscore</b>\n{easyHigh}\n\n" +
             $"<b>Normal highscore</b>\n{normalHigh}\n\n" +
             $"<b>Hard highscore</b>\n{hardHigh}";
+
+        currentDifficultyHighScoreText.text =
+            $"<b>highscore</b>" +
+            $"\n{currentHigh}";
+
+
 
         Debug.Log($"Highscores updated: Easy={easyHigh}, Normal={normalHigh}, Hard={hardHigh}");
         Debug.Log($"[ScoreManager] Difficulty = {GameSettings.Difficulty}");
