@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -8952480965811329652}
   - component: {fileID: -563551658971489784}
   m_Layer: 0
-  m_Name: BlockLime
+  m_Name: BlockGray
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 8237307823343615458, guid: c9ce3a06419efc148b76d1bc06bcd590, type: 3}
+  m_Sprite: {fileID: 6980792594193595179, guid: e9a77aac917ba744cb001c00432306aa, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

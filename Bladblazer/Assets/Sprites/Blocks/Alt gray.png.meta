@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: adf88efc1c996e3479bf64d5791914c7
+guid: e9a77aac917ba744cb001c00432306aa
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 373997383449924778
-    second: Alt lime_0
+      213: 6980792594193595179
+    second: Alt gray_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -109,11 +109,37 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Alt lime_0
+      name: Alt gray_0
       rect:
         serializedVersion: 2
         x: 0
@@ -128,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: aa4557383a4b03500800000000000000
-      internalID: 373997383449924778
+      spriteID: b2b369be0e1c0e060800000000000000
+      internalID: 6980792594193595179
       vertices: []
       indices: 
       edges: []
@@ -148,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Alt lime_0: 373997383449924778
+      Alt gray_0: 6980792594193595179
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

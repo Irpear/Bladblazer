@@ -104,3 +104,9 @@ public class ScoreManager: MonoBehaviour
 
 
 }
+
+
+public static class GameSettings
+{
+    public static int Difficulty = 0;
+}

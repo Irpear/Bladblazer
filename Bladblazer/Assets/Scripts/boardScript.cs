@@ -17,6 +17,8 @@ public class Board : MonoBehaviour
     public GameObject[] blockPrefabs;
     public GameObject[,] grid;      // Totale grid inclusief buffer
 
+    int difficulty;
+
     public float timer = 0f;
     public bool timerActive = false;
 
@@ -38,6 +40,10 @@ public class Board : MonoBehaviour
 
     void Start()
     {
+
+        difficulty = GameSettings.Difficulty;
+        Debug.Log($"Difficulty loaded from GameSettings: {difficulty}");
+
         // Grid is groter dan speelveld voor buffer zones
         totalWidth = width + bufferSize;
         totalHeight = height + bufferSize;
@@ -120,7 +126,7 @@ public class Board : MonoBehaviour
         }
         else
         {
-            prefabIndex = Random.Range(0, 8); // Normaal blok
+            prefabIndex = Random.Range(0, (7 + difficulty)); // bij easy is diff 0, dus dan gebruikt hij de prefabs 0 t/m 6. bij normal 1 dus t/m 7. bij hard 2 dus t/m 8.
         }
 
         if (!isBuffer && prefabIndex != 9)
@@ -150,7 +156,7 @@ public class Board : MonoBehaviour
                     break;
                 }
 
-                prefabIndex = Random.Range(0, 8);
+                prefabIndex = Random.Range(0, (7 + difficulty));
             }
         }
 
