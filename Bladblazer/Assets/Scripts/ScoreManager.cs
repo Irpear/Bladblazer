@@ -2,13 +2,13 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class ScoreManager: MonoBehaviour
+public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }
 
     [SerializeField] public int pointsPerBlock = 100;
     private int currentScore = 0;
-    private int highScore = 0;
+    private int[] highScores = new int[3]; // 0=Easy,1=Normal,2=Hard
     public float currentMultiplier = 1.0f;
 
     private const string HIGH_SCORE_KEY = "HighScore";
@@ -29,7 +29,7 @@ public class ScoreManager: MonoBehaviour
         Debug.Log("ScoreManager Instance set");
         DontDestroyOnLoad(gameObject);
 
-        LoadHighScore();
+        LoadHighScores();
     }
 
     private void OnEnable()
@@ -67,20 +67,26 @@ public class ScoreManager: MonoBehaviour
         OnScoreChanged?.Invoke(currentScore);
     }
 
-    private void LoadHighScore()
+    // Laad alle highscores tegelijk
+    private void LoadHighScores()
     {
-        highScore = PlayerPrefs.GetInt(HIGH_SCORE_KEY, 0);
-        OnHighScoreChanged?.Invoke(highScore);
+        for (int i = 0; i < highScores.Length; i++)
+        {
+            highScores[i] = PlayerPrefs.GetInt($"{HIGH_SCORE_KEY}_{i}", 0);
+        }
+        // Trigger event voor huidige difficulty
+        OnHighScoreChanged?.Invoke(highScores[GameSettings.Difficulty]);
     }
 
     public void CheckAndUpdateHighScore()
     {
-        if (currentScore > highScore)
+        int diff = GameSettings.Difficulty;
+        if (currentScore > highScores[diff])
         {
-            highScore = currentScore;
-            PlayerPrefs.SetInt(HIGH_SCORE_KEY, highScore);
+            highScores[diff] = currentScore;
+            PlayerPrefs.SetInt($"{HIGH_SCORE_KEY}_{diff}", currentScore);
             PlayerPrefs.Save();
-            OnHighScoreChanged?.Invoke(highScore);
+            OnHighScoreChanged?.Invoke(highScores[diff]);
         }
     }
 
@@ -90,10 +96,12 @@ public class ScoreManager: MonoBehaviour
         return currentScore;
     }
 
+    // Geeft highscore van de huidige difficulty
     public int GetHighScore()
     {
-        Debug.Log("Highscore: " + highScore);
-        return highScore;
+        int diff = GameSettings.Difficulty;
+        Debug.Log("Highscore: " + highScores[diff]);
+        return highScores[diff];
     }
 
     public void ResetScore()
@@ -101,8 +109,6 @@ public class ScoreManager: MonoBehaviour
         currentScore = 0;
         OnScoreChanged?.Invoke(currentScore);
     }
-
-
 }
 
 
