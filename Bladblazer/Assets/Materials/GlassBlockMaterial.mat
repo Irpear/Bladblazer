@@ -52,7 +52,7 @@ Material:
     - _GlassTransparency: 0
     - _InternalAngleSharpness: 5
     - _InternalReflectionStrength: 0
-    - _InternalScatter: 0.8
+    - _InternalScatter: 2
     - _InternalTintStrength: 0.501
     - _NoiseScale: 1
     - _RayAngle: 71
@@ -63,7 +63,7 @@ Material:
     - _ShimmerSpeed: 0.96
     - _ShimmerStrength: 1
     - _ShineStrength: 0.65
-    - _SurfaceNoise: 0.2
+    - _SurfaceNoise: 0
     - _Translucency: 0.4
     - _ZWrite: 0
     m_Colors:
