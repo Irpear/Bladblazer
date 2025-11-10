@@ -83,4 +83,9 @@ public class MoveManager : MonoBehaviour
         SceneManager.LoadScene("StartScreen");
         ScoreManager.Instance.ResetScore();
     }
+
+    public void GoToDiff()
+    {
+        SceneManager.LoadScene("DiffScreen");
+    }
 }
