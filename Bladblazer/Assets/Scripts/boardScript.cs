@@ -22,8 +22,8 @@ public class Board : MonoBehaviour
     public static bool fallLeft = true; // true = links, false = rechts
     public UnityEngine.UI.Image leftButtonImage;
     public UnityEngine.UI.Image rightButtonImage;
-    public Color activeColor = Color.green;
-    public Color inactiveColor = Color.white;
+    public Color activeColor = new Color(1f, 1f, 1f, 0f);
+    public Color inactiveColor = new Color(21f / 255f, 25f / 255f, 30f / 255f, 1f);
 
     public float timer = 0f;
     public bool timerActive = false;
