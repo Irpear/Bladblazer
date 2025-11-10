@@ -85,6 +85,11 @@ public class Block : MonoBehaviour
     public void OnClicked()
     {
 
+        if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
+        {
+            // Klik gebeurde over een UI-element, negeer
+            return;
+        }
 
         // Inspawnen van een nieuw blok werkt nu
         // Nu er voor zorgen dat een ander blok pas weggehaalt kan worden als een nieuw blok is gespawned
