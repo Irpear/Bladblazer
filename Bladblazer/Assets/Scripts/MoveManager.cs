@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
+using System.Collections;
+
 
 public class MoveManager : MonoBehaviour
 {
@@ -44,10 +46,7 @@ public class MoveManager : MonoBehaviour
             UpdateMovesUI();
             Debug.Log("Moves left: " + movesLeft);
 
-        if (movesLeft <= 0)
-        {
-            GameOver();
-        }
+        StartCoroutine(CheckGameOverWithDelay());
     }
 
     public void AddExtraMove()
@@ -88,4 +87,16 @@ public class MoveManager : MonoBehaviour
     {
         SceneManager.LoadScene("DiffScreen");
     }
+
+    private IEnumerator CheckGameOverWithDelay()
+    {
+        // Wacht een halve seconde, zodat matches en extra moves verwerkt zijn
+        yield return new WaitForSeconds(1.6f);
+
+        if (movesLeft <= 0)
+        {
+            GameOver();
+        }
+    }
+
 }
