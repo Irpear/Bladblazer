@@ -19,6 +19,12 @@ public class Board : MonoBehaviour
 
     int difficulty;
 
+    public static bool fallLeft = true; // true = links, false = rechts
+    public UnityEngine.UI.Image leftButtonImage;
+    public UnityEngine.UI.Image rightButtonImage;
+    public Color activeColor = Color.green;
+    public Color inactiveColor = Color.white;
+
     public float timer = 0f;
     public bool timerActive = false;
 
@@ -57,6 +63,7 @@ public class Board : MonoBehaviour
         FillBoard();
         FillBufferZones(); // Vul de buffer zones aan de start
         StartCoroutine(ResolveMatches());
+        UpdateButtonVisuals();
     }
 
     private void Update()
@@ -519,19 +526,20 @@ public class Board : MonoBehaviour
                         }
                         else if (leftPressure > 0 || upPressure > 0)
                         {
-                            if (Random.value < 0.5f && leftPressure > 0)
+                            if (fallLeft && leftPressure > 0)
                             {
                                 if (SlideDiagonalLine(x, y, -1, 0))
                                     anyMoved = true;
-                                    AudioSource.PlayClipAtPoint(blockFallSoundClip, transform.position);
+                                AudioSource.PlayClipAtPoint(blockFallSoundClip, transform.position);
                             }
-                            else if (upPressure > 0)
+                            else if (!fallLeft && upPressure > 0)
                             {
                                 if (SlideDiagonalLine(x, y, 0, 1))
                                     anyMoved = true;
-                                    AudioSource.PlayClipAtPoint(blockFallSoundClip, transform.position);
+                                AudioSource.PlayClipAtPoint(blockFallSoundClip, transform.position);
                             }
                         }
+
                     }
                 }
             }
@@ -676,6 +684,29 @@ public class Board : MonoBehaviour
         popup.Initialize(scoreAmount, centerPos);
         Debug.Log("Initialize called");
 
+    }
+
+    public void SetFallDirectionLeft()
+    {
+        fallLeft = true;
+        UpdateButtonVisuals();
+        Debug.Log("Fall direction set to LEFT");
+    }
+
+    public void SetFallDirectionRight()
+    {
+        fallLeft = false;
+        UpdateButtonVisuals();
+        Debug.Log("Fall direction set to RIGHT");
+    }
+
+    private void UpdateButtonVisuals()
+    {
+        if (leftButtonImage != null)
+            leftButtonImage.color = fallLeft ? activeColor : inactiveColor;
+
+        if (rightButtonImage != null)
+            rightButtonImage.color = fallLeft ? inactiveColor : activeColor;
     }
 
 }
