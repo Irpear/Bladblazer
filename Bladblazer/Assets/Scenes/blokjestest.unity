@@ -337,7 +337,7 @@ MonoBehaviour:
   gameOverScreen: {fileID: 2086940123}
   pauseScreen: {fileID: 308302367}
   pauseButtonText: {fileID: 859153809}
-  pauseButton: {fileID: 1737789270}
+  pauseButton: {fileID: 1737789272}
 --- !u!4 &122173069
 Transform:
   m_ObjectHideFlags: 0
@@ -3354,10 +3354,10 @@ MonoBehaviour:
     m_NormalColor: {r: 0, g: 0, b: 0, a: 1}
     m_HighlightedColor: {r: 0, g: 0.41568628, b: 0.8509804, a: 1}
     m_PressedColor: {r: 0, g: 0.41568628, b: 0.8509804, a: 1}
-    m_SelectedColor: {r: 0, g: 0, b: 0, a: 1}
+    m_SelectedColor: {r: 0, g: 0.40000004, b: 0.81568635, a: 1}
     m_DisabledColor: {r: 0, g: 0.41568628, b: 0.8509804, a: 0.5019608}
     m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
+    m_FadeDuration: 0.5
   m_SpriteState:
     m_HighlightedSprite: {fileID: 0}
     m_PressedSprite: {fileID: 0}
@@ -3605,7 +3605,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 740, y: 1706.3}
+  m_AnchoredPosition: {x: 783, y: 1564}
   m_SizeDelta: {x: 325.9427, y: 204.1909}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1828912365
