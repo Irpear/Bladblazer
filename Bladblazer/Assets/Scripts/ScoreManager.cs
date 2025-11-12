@@ -42,11 +42,10 @@ public class ScoreManager : MonoBehaviour
         GameEvents.OnBlocksRemoved.RemoveListener(HandleBlocksRemoved);
     }
 
-    private void HandleBlocksRemoved(int runLength)
+    private void HandleBlocksRemoved(int points)
     {
-        Debug.Log($"HandleBlockRemoved: BlockCOunt={runLength}, currentMultiplier={currentMultiplier}");
-        int scoreEarned = Mathf.RoundToInt(runLength * pointsPerBlock * currentMultiplier);
-        AddScore(scoreEarned);
+        Debug.Log($"HandleBlockRemoved (points): {points}");
+        AddScore(points);
     }
 
     public void SetMultiplier(float multiplier)
