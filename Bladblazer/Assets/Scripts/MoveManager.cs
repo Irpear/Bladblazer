@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEngine.SceneManagement;
 using Unity.VisualScripting;
 using System.Collections;
@@ -16,6 +17,11 @@ public class MoveManager : MonoBehaviour
     public Board board;
 
     public GameObject gameOverScreen;
+
+    public GameObject pauseScreen;
+    public TextMeshProUGUI pauseButtonText;
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -86,6 +92,24 @@ public class MoveManager : MonoBehaviour
     public void GoToDiff()
     {
         SceneManager.LoadScene("DiffScreen");
+    }
+
+    public void OpenPause()
+    {
+        if (pauseScreen.activeSelf == false)
+        {
+            pauseScreen.SetActive(true);
+            pauseButtonText.text = "X";
+        } else
+        {
+            ClosePause();
+        }
+        
+    }
+    public void ClosePause()
+    {
+        pauseScreen.SetActive(false);
+        pauseButtonText.text = "ll";
     }
 
     private IEnumerator CheckGameOverWithDelay()
