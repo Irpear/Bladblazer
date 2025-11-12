@@ -21,6 +21,7 @@ public class MoveManager : MonoBehaviour
     public GameObject pauseScreen;
     public TextMeshProUGUI pauseButtonText;
 
+    public GameObject pauseButton;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -73,6 +74,7 @@ public class MoveManager : MonoBehaviour
     {
         Debug.Log("Game Over! No moves left.");
         gameOverScreen.SetActive(true);
+        pauseButton.SetActive(false);
         gameIsOver = true;
         ScoreManager.Instance.CheckAndUpdateHighScore();
     }

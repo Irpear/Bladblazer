@@ -337,6 +337,7 @@ MonoBehaviour:
   gameOverScreen: {fileID: 2086940123}
   pauseScreen: {fileID: 308302367}
   pauseButtonText: {fileID: 859153809}
+  pauseButton: {fileID: 1737789270}
 --- !u!4 &122173069
 Transform:
   m_ObjectHideFlags: 0
