@@ -1727,7 +1727,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31d6e0ef69ba6bf409e606c9beac4e22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScoreManager
-  pointsPerBlock: 100
+  pointsPerBlock: 1
   currentMultiplier: 1
   OnScoreChanged:
     m_PersistentCalls:

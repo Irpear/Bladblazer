@@ -6,7 +6,7 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager Instance { get; private set; }
 
-    [SerializeField] public int pointsPerBlock = 100;
+    [SerializeField] public int pointsPerBlock = 1;
     private int currentScore = 0;
     private int[] highScores = new int[3]; // 0=Easy,1=Normal,2=Hard
     public float currentMultiplier = 1.0f;
