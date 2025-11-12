@@ -74,7 +74,7 @@ public class MoveManager : MonoBehaviour
     {
         if (movesText != null)
         {
-            movesText.text = "Moves: " + movesLeft;
+            movesText.text = "" + movesLeft;
         }
     }
 
