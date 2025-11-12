@@ -180,10 +180,10 @@ MonoBehaviour:
   m_Transition: 1
   m_Colors:
     m_NormalColor: {r: 0, g: 0, b: 0, a: 1}
-    m_HighlightedColor: {r: 0.6313726, g: 0.8196079, b: 0, a: 1}
-    m_PressedColor: {r: 0.6313726, g: 0.8196079, b: 0, a: 1}
-    m_SelectedColor: {r: 0.6313726, g: 0.8196079, b: 0, a: 1}
-    m_DisabledColor: {r: 0.6313726, g: 0.8196079, b: 0, a: 0.5019608}
+    m_HighlightedColor: {r: 0.49411765, g: 0.2784314, b: 0.95686275, a: 1}
+    m_PressedColor: {r: 0.49411765, g: 0.2784314, b: 0.95686275, a: 1}
+    m_SelectedColor: {r: 0.49411765, g: 0.2784314, b: 0.95686275, a: 1}
+    m_DisabledColor: {r: 0.49411765, g: 0.2784314, b: 0.95686275, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -447,7 +447,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Go back
+  m_text: Home
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -578,6 +578,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScoreDisplay
   scoreText: {fileID: 0}
   highScoreText: {fileID: 949889590}
+  currentDifficultyHighScoreText: {fileID: 0}
 --- !u!114 &949889590
 MonoBehaviour:
   m_ObjectHideFlags: 0

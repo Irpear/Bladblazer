@@ -115,7 +115,7 @@ public class MoveManager : MonoBehaviour
     private IEnumerator CheckGameOverWithDelay()
     {
         // Wacht een halve seconde, zodat matches en extra moves verwerkt zijn
-        yield return new WaitForSeconds(1.6f);
+        yield return new WaitForSeconds(1.3f);
 
         if (movesLeft <= 0)
         {
