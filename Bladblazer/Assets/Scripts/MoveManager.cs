@@ -23,6 +23,8 @@ public class MoveManager : MonoBehaviour
 
     public Button pauseButton;
 
+    private Coroutine gameOverCheckRoutine;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -53,7 +55,13 @@ public class MoveManager : MonoBehaviour
             UpdateMovesUI();
             Debug.Log("Moves left: " + movesLeft);
 
-        StartCoroutine(CheckGameOverWithDelay());
+        if (gameOverCheckRoutine != null)
+        {
+            StopCoroutine(gameOverCheckRoutine);
+        }
+
+        // Start nieuwe check
+        gameOverCheckRoutine = StartCoroutine(CheckGameOverWithDelay());
     }
 
     public void AddExtraMove()
@@ -119,10 +127,12 @@ public class MoveManager : MonoBehaviour
         // Wacht een halve seconde, zodat matches en extra moves verwerkt zijn
         yield return new WaitForSeconds(1.3f);
 
-        if (movesLeft <= 0)
+        if (!gameIsOver && movesLeft <= 0)
         {
             GameOver();
         }
+
+        gameOverCheckRoutine = null;
     }
 
 }
