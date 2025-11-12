@@ -645,7 +645,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1779891501}
         m_TargetAssemblyTypeName: Board, Assembly-CSharp
-        m_MethodName: SetFallDirectionRight
+        m_MethodName: SetFallDirectionLeft
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -908,17 +908,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 607566292}
-  m_LocalRotation: {x: -0, y: -0, z: 0.9283133, w: -0.37179872}
+  m_LocalRotation: {x: 0, y: 0, z: -0.38268343, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 512741310}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -136.347}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 792, y: -1913}
-  m_SizeDelta: {x: 304.7889, y: 468.4756}
+  m_AnchoredPosition: {x: 730, y: -1848}
+  m_SizeDelta: {x: 350, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &607566294
 MonoBehaviour:
@@ -940,7 +940,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2647690127106851821, guid: 0a80d8d777643274cb1329995508709b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c5634daed71e8bc41894ea972cfa9192, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1171,17 +1171,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1072934558}
-  m_LocalRotation: {x: -0, y: -0, z: 0.38246378, w: -0.9239705}
+  m_LocalRotation: {x: 0, y: -0, z: 0.9238796, w: -0.38268325}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 512741310}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 315.027}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 225}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -804.01746, y: -1913.001}
-  m_SizeDelta: {x: 304.7889, y: 468.4756}
+  m_AnchoredPosition: {x: -729, y: -1849}
+  m_SizeDelta: {x: 350, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1072934560
 MonoBehaviour:
@@ -1203,7 +1203,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -2647690127106851821, guid: 0a80d8d777643274cb1329995508709b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c5634daed71e8bc41894ea972cfa9192, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2058,10 +2058,10 @@ MonoBehaviour:
   - {fileID: 4297138597883612037, guid: 5e35ce6cfad1fdc47b9c535c2e178652, type: 3}
   - {fileID: 4297138597883612037, guid: e044bcb1661a4704cab5f18e38f6863b, type: 3}
   - {fileID: 4297138597883612037, guid: 1c74385a861a0344faf824500e0e2a36, type: 3}
-  leftButtonImage: {fileID: 1985496996}
-  rightButtonImage: {fileID: 490538580}
-  activeColor: {r: 0, g: 0, b: 0, a: 0}
-  inactiveColor: {r: 0.08235294, g: 0.09803922, b: 0.11764706, a: 1}
+  leftButtonImage: {fileID: 490538580}
+  rightButtonImage: {fileID: 1985496996}
+  activeColor: {r: 1, g: 1, b: 1, a: 0}
+  inactiveColor: {r: 0.08235294, g: 0.09803922, b: 0.11764706, a: 0.8627451}
   timer: 0
   timerActive: 0
   isResolvingMatches: 0
@@ -2318,7 +2318,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1779891501}
         m_TargetAssemblyTypeName: Board, Assembly-CSharp
-        m_MethodName: SetFallDirectionLeft
+        m_MethodName: SetFallDirectionRight
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
