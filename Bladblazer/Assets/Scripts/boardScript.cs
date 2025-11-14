@@ -376,7 +376,7 @@ public class Board : MonoBehaviour
                 {
                     removePositions.Add((x, y));
                     Debug.Log($"Match gevonden op: ({x}, {y})");
-                    AudioSource.PlayClipAtPoint(matchSoundClip, transform.position);
+                    AudioSource.PlayClipAtPoint(matchSoundClip, transform.position, 0.6f);
                     timer += 0.5f;
                 }
             }
