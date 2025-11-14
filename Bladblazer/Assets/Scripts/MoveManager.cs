@@ -66,8 +66,11 @@ public class MoveManager : MonoBehaviour
 
     public void AddExtraMove()
     {
-        movesLeft++;
-        UpdateMovesUI();
+        if (movesLeft < 10)
+        {
+            movesLeft++;
+            UpdateMovesUI();
+        }
     }
 
     void UpdateMovesUI()
