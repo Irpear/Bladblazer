@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class StartMenuController : MonoBehaviour
 {
+    public GameObject tutorialScreen;
 
     public void OnClickHome()
     {
@@ -32,6 +33,15 @@ public class StartMenuController : MonoBehaviour
     {
         GameSettings.Difficulty = 2;
         SceneManager.LoadScene("blokjestest");
+    }
+
+    public void OnClickOpenTutorial()
+    {
+        tutorialScreen.SetActive(true);
+    }
+    public void OnClickCloseTutorial()
+    {
+        tutorialScreen.SetActive(false);
     }
 
 }
