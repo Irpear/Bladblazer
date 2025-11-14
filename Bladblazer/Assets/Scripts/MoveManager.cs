@@ -32,11 +32,11 @@ public class MoveManager : MonoBehaviour
 
         if (GameSettings.Difficulty == 0)
         {
-            totalMoves = 10;
+            totalMoves = 5;
         }
         else if (GameSettings.Difficulty == 1)
         {
-            totalMoves = 8;
+            totalMoves = 5;
         }
         else if (GameSettings.Difficulty == 2)
         {

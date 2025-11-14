@@ -21,18 +21,21 @@ public class StartMenuController : MonoBehaviour
     {
         GameSettings.Difficulty = 0;
         SceneManager.LoadScene("blokjestest");
+        ScoreManager.Instance.ResetScore();
     }
 
     public void OnClickPlayNormal()
     {
         GameSettings.Difficulty = 1;
         SceneManager.LoadScene("blokjestest");
+        ScoreManager.Instance.ResetScore();
     }
 
     public void OnClickPlayHard()
     {
         GameSettings.Difficulty = 2;
         SceneManager.LoadScene("blokjestest");
+        ScoreManager.Instance.ResetScore();
     }
 
     public void OnClickOpenTutorial()
