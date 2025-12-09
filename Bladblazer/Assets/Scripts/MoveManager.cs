@@ -8,7 +8,11 @@ using System.Collections;
 
 public class MoveManager : MonoBehaviour
 {
-    [SerializeField] private ConfirmationPopup confirmationPopup;
+    [SerializeField] private ConfirmationPopup leavePopup;
+    [SerializeField] private ConfirmationPopup restartPopup;
+    [SerializeField] private ConfirmationPopup changeDifficultyPopup;
+
+
 
     public int totalMoves;
     private int movesLeft;
@@ -93,18 +97,17 @@ public class MoveManager : MonoBehaviour
 
     public void RestartGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        ScoreManager.Instance.ResetScore();
+        restartPopup.ShowRestartPopup();
     }
 
     public void GoToStart()
     {
-        confirmationPopup.ShowPopup();
+        leavePopup.ShowLeavePopup();
     }
 
     public void GoToDiff()
     {
-        SceneManager.LoadScene("DiffScreen");
+        changeDifficultyPopup.ShowChangeDifficultyPopup();
     }
 
     public void OpenPause()
