@@ -3460,6 +3460,7 @@ MonoBehaviour:
   - {fileID: 4297138597883612037, guid: c5793a6e911b8da46b7e6a2dd263b298, type: 3}
   - {fileID: 4297138597883612037, guid: 5e35ce6cfad1fdc47b9c535c2e178652, type: 3}
   - {fileID: 4297138597883612037, guid: e044bcb1661a4704cab5f18e38f6863b, type: 3}
+  - {fileID: 4297138597883612037, guid: f8661307b8b023c4786eb180e4b2a7ce, type: 3}
   - {fileID: 4297138597883612037, guid: 1c74385a861a0344faf824500e0e2a36, type: 3}
   leftButtonImage: {fileID: 490538580}
   rightButtonImage: {fileID: 1985496996}

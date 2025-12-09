@@ -129,14 +129,14 @@ public class Board : MonoBehaviour
         int disco = Random.Range(0, 100);
         if (disco == 42) 
         {
-            prefabIndex = 9; // Disco block
+            prefabIndex = 10; // Disco block
         }
         else
         {
-            prefabIndex = Random.Range(0, (7 + difficulty)); // bij easy is diff 0, dus dan gebruikt hij de prefabs 0 t/m 6. bij normal 1 dus t/m 7. bij hard 2 dus t/m 8.
+            prefabIndex = Random.Range(0, (8 + difficulty)); // bij easy is diff 0, dus dan gebruikt hij de prefabs 0 t/m 7. bij normal 1 dus t/m 8. bij hard 2 dus t/m 9.
         }
 
-        if (!isBuffer && prefabIndex != 9)
+        if (!isBuffer && prefabIndex != 10)
         {
             for (int attempt = 0; attempt < maxAttempts; attempt++)
             {
@@ -163,7 +163,7 @@ public class Board : MonoBehaviour
                     break;
                 }
 
-                prefabIndex = Random.Range(0, (7 + difficulty));
+                prefabIndex = Random.Range(0, (8 + difficulty));
             }
         }
 
@@ -221,7 +221,7 @@ public class Board : MonoBehaviour
                         Vector3 centerPos = new Vector3(centerX, centerY, 0);
                         matchCenters.Add(centerPos);
 
-                        isDiscoMatch.Add(runColor == 9);
+                        isDiscoMatch.Add(runColor == 10);
                     }
                     runLength = 0;
                     runColor = -999;
@@ -257,7 +257,7 @@ public class Board : MonoBehaviour
                         matchCenters.Add(centerPos);
 
 
-                        isDiscoMatch.Add(runColor == 9);
+                        isDiscoMatch.Add(runColor == 10);
                     }
                     runStartX = x;
                     runLength = 1;
@@ -277,7 +277,7 @@ public class Board : MonoBehaviour
                 matchCenters.Add(centerPos);
 
 
-                isDiscoMatch.Add(runColor == 9);
+                isDiscoMatch.Add(runColor == 10);
             }
         }
 
@@ -307,7 +307,7 @@ public class Board : MonoBehaviour
                         Vector3 centerPos = new Vector3(centerX, centerY, 0);
                         matchCenters.Add(centerPos);
 
-                        isDiscoMatch.Add(runColor == 9);
+                        isDiscoMatch.Add(runColor == 10);
                     }
                     runLength = 0;
                     runColor = -999;
@@ -344,7 +344,7 @@ public class Board : MonoBehaviour
                         Vector3 centerPos = new Vector3(centerX, centerY, 0);
                         matchCenters.Add(centerPos);
 
-                        isDiscoMatch.Add(runColor == 9);
+                        isDiscoMatch.Add(runColor == 10);
                     }
                     runStartY = y;
                     runLength = 1;
@@ -363,7 +363,7 @@ public class Board : MonoBehaviour
                 Vector3 centerPos = new Vector3(centerX, centerY, 0);
                 matchCenters.Add(centerPos);
 
-                isDiscoMatch.Add(runColor == 9);
+                isDiscoMatch.Add(runColor == 10);
             }
         }
 
