@@ -8,6 +8,7 @@ using System.Collections;
 
 public class MoveManager : MonoBehaviour
 {
+    [SerializeField] private ConfirmationPopup confirmationPopup;
 
     public int totalMoves;
     private int movesLeft;
@@ -98,8 +99,7 @@ public class MoveManager : MonoBehaviour
 
     public void GoToStart()
     {
-        SceneManager.LoadScene("StartScreen");
-        ScoreManager.Instance.ResetScore();
+        confirmationPopup.ShowPopup();
     }
 
     public void GoToDiff()
