@@ -3107,9 +3107,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d03b5924db1e3e944819ca04d27f0b6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConfirmationPopup
-  leavePanel: {fileID: 0}
-  restartPanel: {fileID: 0}
-  changeDifficultyPanel: {fileID: 0}
+  leavePanel: {fileID: 1812109347}
+  restartPanel: {fileID: 1424738593}
+  changeDifficultyPanel: {fileID: 1058242334}
   scoreManager: {fileID: 0}
 --- !u!114 &934534495
 MonoBehaviour:
@@ -4072,9 +4072,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d03b5924db1e3e944819ca04d27f0b6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ConfirmationPopup
-  leavePanel: {fileID: 0}
+  leavePanel: {fileID: 1812109347}
   restartPanel: {fileID: 1424738593}
-  changeDifficultyPanel: {fileID: 0}
+  changeDifficultyPanel: {fileID: 1058242334}
   scoreManager: {fileID: 0}
 --- !u!114 &1271201936
 MonoBehaviour:
@@ -6089,9 +6089,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1575682798}
+      - m_Target: {fileID: 934534494}
         m_TargetAssemblyTypeName: ConfirmationPopup, Assembly-CSharp
-        m_MethodName: LeaveGame
+        m_MethodName: ChangeDifficulty
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
