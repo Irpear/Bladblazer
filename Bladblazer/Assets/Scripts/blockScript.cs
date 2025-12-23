@@ -85,6 +85,11 @@ public class Block : MonoBehaviour
     public void OnClicked()
     {
 
+        if (moveManager != null && moveManager.movesLeft <= 0)
+        {
+            return;
+        }
+
         if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject())
         {
             // Klik gebeurde over een UI-element, negeer

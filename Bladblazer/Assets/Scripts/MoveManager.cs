@@ -15,7 +15,7 @@ public class MoveManager : MonoBehaviour
 
 
     public int totalMoves;
-    private int movesLeft;
+    public int movesLeft;
     public Text movesText;
     public bool gameIsOver = false;
 
@@ -97,17 +97,40 @@ public class MoveManager : MonoBehaviour
 
     public void RestartGame()
     {
-        restartPopup.ShowRestartPopup();
+        if (gameIsOver == false)
+        {
+            restartPopup.ShowRestartPopup();
+        } else
+        {
+            restartPopup.RestartGame();
+        }
+        
     }
 
     public void GoToStart()
     {
-        leavePopup.ShowLeavePopup();
+        
+        if (gameIsOver == false)
+        {
+            leavePopup.ShowLeavePopup();
+        }
+        else
+        {
+            leavePopup.LeaveGame();
+        }
     }
 
     public void GoToDiff()
     {
-        changeDifficultyPopup.ShowChangeDifficultyPopup();
+        
+        if (gameIsOver == false)
+        {
+            changeDifficultyPopup.ShowChangeDifficultyPopup();
+        }
+        else
+        {
+            changeDifficultyPopup.ChangeDifficulty();
+        }
     }
 
     public void OpenPause()
